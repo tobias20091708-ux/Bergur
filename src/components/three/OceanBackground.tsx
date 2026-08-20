@@ -26,8 +26,12 @@ function supportsWebGL() {
   }
 }
 
-function subscribe() {
-  return () => {};
+function subscribe(callback: () => void) {
+  // Force a re-check shortly after mount so the client's real WebGL
+  // support value replaces the SSR-only `false` snapshot, rather than
+  // relying solely on React's implicit post-hydration re-sync.
+  const id = setTimeout(callback, 0);
+  return () => clearTimeout(id);
 }
 
 function getServerSnapshot() {

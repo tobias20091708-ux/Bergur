@@ -5,7 +5,13 @@ import { useEffect, useRef, useSyncExternalStore } from "react";
 function subscribe(callback: () => void) {
   const mql = window.matchMedia("(pointer: fine)");
   mql.addEventListener("change", callback);
-  return () => mql.removeEventListener("change", callback);
+  // Force a re-check shortly after mount so the client's real value
+  // replaces the SSR-only `false` snapshot.
+  const id = setTimeout(callback, 0);
+  return () => {
+    mql.removeEventListener("change", callback);
+    clearTimeout(id);
+  };
 }
 
 function getSnapshot() {
