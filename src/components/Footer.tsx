@@ -10,6 +10,11 @@ const links = [
 export function Footer({ email = DEFAULT_EMAIL }: { email?: string }) {
   return (
     <footer className="bg-background px-6 py-10 text-sm text-muted sm:px-12">
+      <div
+        aria-hidden="true"
+        className="-mx-6 -mt-10 mb-10 h-1 sm:-mx-12"
+        style={{ background: "var(--faroe-gradient)" }}
+      />
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
         <nav className="flex flex-wrap gap-x-6 gap-y-2 text-xs uppercase tracking-wide">
           {links.map((link) => (

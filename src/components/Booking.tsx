@@ -15,7 +15,7 @@ export function Booking() {
   return (
     <section
       id="book"
-      className="border-t border-border bg-surface px-6 py-24 sm:px-12"
+      className="border-t border-border bg-surface px-6 py-32 sm:px-12"
     >
       <div className="mx-auto max-w-2xl">
         <ScrollReveal>
@@ -38,23 +38,22 @@ export function Booking() {
           <div className="flex flex-wrap gap-4 text-xs text-muted sm:text-sm">
             <a
               href="#hero"
-              className="flex items-center gap-2 rounded-full border border-border bg-surface-raised px-4 py-2 transition hover:border-accent hover:text-foreground"
+              className="rounded-md border border-border bg-surface-raised px-4 py-2 transition hover:border-accent hover:text-foreground"
             >
-              <span aria-hidden="true">▶</span> 1. Se Bergur fortælle
+              1. Se Bergur fortælle
             </a>
-            <span className="flex items-center gap-2 rounded-full border border-border bg-surface-raised px-4 py-2">
-              <span aria-hidden="true">📄</span> 2. Bed om pressekit i
-              beskeden nedenfor
+            <span className="rounded-md border border-border bg-surface-raised px-4 py-2">
+              2. Bed om pressekit i beskeden nedenfor
             </span>
-            <span className="flex items-center gap-2 rounded-full border border-accent bg-accent-soft px-4 py-2 text-foreground">
-              <span aria-hidden="true">✓</span> 3. Forespørg på dato og pris
+            <span className="rounded-md border border-accent bg-accent-soft px-4 py-2 text-foreground">
+              3. Forespørg på dato og pris
             </span>
           </div>
         </ScrollReveal>
 
         <ScrollReveal delay={0.1} className="mt-10">
           {submitted ? (
-            <p className="rounded-2xl border border-border bg-surface-raised p-8 text-foreground">
+            <p className="rounded-lg border border-border bg-surface-raised p-8 text-foreground">
               Tak for din forespørgsel — vi vender tilbage hurtigst muligt.
             </p>
           ) : (
@@ -129,7 +128,7 @@ export function Booking() {
               </label>
               <button
                 type="submit"
-                className="mt-2 w-fit rounded-full bg-accent px-8 py-3 text-sm font-medium text-background transition hover:bg-accent/90"
+                className="btn-faroe mt-2 w-fit rounded-md px-8 py-3 text-sm font-medium text-white"
               >
                 Send forespørgsel
               </button>

@@ -6,7 +6,7 @@ import { ScrollReveal } from "./ScrollReveal";
 const DEFAULT_EYEBROW = "Heinesen-hulen";
 const DEFAULT_TITLE = "En hule, seks niveauer ned i den færøske undergrund";
 const DEFAULT_BODY =
-  "Henning Larsen Arkitekter har tegnet en fysisk version af Platons hulelignelse under Færøernes jord — og Bergur er manden bag. Et spektakulært kultur-arkitekturprojekt, der bruger William Heinesens forfatterskab som storytelling-motor.";
+  "Henning Larsen Arkitekter har tegnet en fysisk version af Platons hulelignelse under Færøernes jord — og Bergur er manden bag idéen. Seks niveauer ned i klippen, med William Heinesens forfatterskab som det fortællende gulv under det hele.";
 
 export function HeinesenProject({
   eyebrow = DEFAULT_EYEBROW,
@@ -22,11 +22,11 @@ export function HeinesenProject({
   return (
     <section
       id="heinesen-hulen"
-      className="border-b border-t border-border bg-background px-6 py-24 sm:px-12"
+      className="border-b border-t border-border bg-background px-6 py-32 sm:px-12"
     >
       <div className="mx-auto grid max-w-6xl gap-12 sm:grid-cols-2 sm:items-center">
         <ScrollReveal>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-surface-raised via-accent-soft to-background">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border bg-gradient-to-br from-surface-raised via-accent-soft to-background">
             {image ? (
               <Image
                 src={urlFor(image).width(1000).height(750).url()}
@@ -50,7 +50,9 @@ export function HeinesenProject({
           <h2 className="mt-4 text-balance font-serif text-3xl italic text-foreground sm:text-4xl">
             {title}
           </h2>
-          <p className="mt-6 leading-relaxed text-muted">{body}</p>
+          <p className="mt-6 text-base leading-relaxed text-muted sm:text-lg sm:leading-loose">
+            {body}
+          </p>
           <a
             href="#book"
             className="mt-6 inline-block text-sm font-medium text-accent transition hover:text-foreground"
@@ -62,7 +64,7 @@ export function HeinesenProject({
       <ScrollReveal delay={0.15} className="mt-14 text-center">
         <a
           href="#book"
-          className="inline-block rounded-full border border-border px-6 py-2.5 text-sm text-muted transition hover:border-accent hover:text-foreground"
+          className="inline-block rounded-md border border-border px-6 py-2.5 text-sm text-muted transition hover:border-accent hover:text-foreground"
         >
           Book foredrag →
         </a>

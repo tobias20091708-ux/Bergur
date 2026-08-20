@@ -1,7 +1,7 @@
 const links = [
+  { href: "#om-bergur", label: "Om Bergur" },
   { href: "#foredrag", label: "Foredrag" },
   { href: "#heinesen-hulen", label: "Heinesen-hulen" },
-  { href: "#om-bergur", label: "Om Bergur" },
   { href: "#book", label: "Book foredrag" },
 ];
 
@@ -24,7 +24,7 @@ export function Header() {
       </nav>
       <a
         href="#book"
-        className="rounded-full border border-border px-4 py-2 text-sm text-foreground transition hover:border-accent hover:text-accent sm:hidden"
+        className="rounded-md border border-border px-4 py-2 text-sm text-foreground transition hover:border-accent hover:text-accent sm:hidden"
       >
         Book
       </a>

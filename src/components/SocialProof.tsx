@@ -22,7 +22,7 @@ export function SocialProof({
   testimonials?: Testimonial[];
 }) {
   return (
-    <section className="bg-surface px-6 py-24 sm:px-12">
+    <section className="bg-surface px-6 py-32 sm:px-12">
       <div className="mx-auto max-w-6xl">
         <ScrollReveal>
           <p className="text-sm uppercase tracking-[0.3em] text-accent">
@@ -35,8 +35,14 @@ export function SocialProof({
         <div className="mt-10 grid gap-6 sm:grid-cols-2">
           {testimonials.map((q, i) => (
             <ScrollReveal key={q._id} delay={i * 0.1}>
-              <blockquote className="rounded-2xl border border-border bg-surface-raised p-8 text-muted shadow-lg shadow-black/20">
-                <p className="font-serif italic text-foreground">
+              <blockquote className="rounded-lg border border-border bg-surface-raised p-8 text-muted shadow-lg shadow-black/20">
+                <p
+                  aria-hidden="true"
+                  className="tracking-widest text-accent"
+                >
+                  ★★★★★
+                </p>
+                <p className="mt-3 font-serif text-base italic leading-relaxed text-foreground sm:text-lg">
                   &ldquo;{q.quote}&rdquo;
                 </p>
                 <footer className="mt-4 text-sm">
@@ -56,7 +62,7 @@ export function SocialProof({
         <ScrollReveal delay={0.25} className="mt-10 text-center">
           <a
             href="#book"
-            className="inline-block rounded-full border border-border px-6 py-2.5 text-sm text-muted transition hover:border-accent hover:text-foreground"
+            className="inline-block rounded-md border border-border px-6 py-2.5 text-sm text-muted transition hover:border-accent hover:text-foreground"
           >
             Book foredrag →
           </a>

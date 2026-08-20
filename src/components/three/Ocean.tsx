@@ -18,9 +18,9 @@ const vertexShader = /* glsl */ `
     vec3 pos = position;
 
     float elevation = 0.0;
-    elevation += wave(pos.xy, 0.25, 0.35, 0.6, 1.0, 0.3);
-    elevation += wave(pos.xy, 0.55, 0.15, 1.1, -0.5, 1.0);
-    elevation += wave(pos.xy, 1.3, 0.06, 1.8, 0.8, -0.6);
+    elevation += wave(pos.xy, 0.18, 0.14, 0.12, 1.0, 0.3);
+    elevation += wave(pos.xy, 0.4, 0.06, 0.2, -0.5, 1.0);
+    elevation += wave(pos.xy, 0.9, 0.025, 0.32, 0.8, -0.6);
 
     pos.z += elevation;
     vElevation = elevation;
@@ -40,22 +40,17 @@ const fragmentShader = /* glsl */ `
 
   uniform vec3 uColorDeep;
   uniform vec3 uColorShallow;
-  uniform vec3 uColorFoam;
 
   void main() {
     vec3 normal = normalize(vNormal);
     vec3 viewDir = normalize(vViewPosition);
     float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 3.0);
 
-    float mixFactor = smoothstep(-0.2, 0.35, vElevation);
+    float mixFactor = smoothstep(-0.1, 0.16, vElevation);
     vec3 color = mix(uColorDeep, uColorShallow, mixFactor);
+    color += fresnel * 0.06;
 
-    float foam = smoothstep(0.3, 0.42, vElevation);
-    color = mix(color, uColorFoam, foam * 0.5);
-
-    color += fresnel * 0.12;
-
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(color, 0.9);
   }
 `;
 
@@ -65,9 +60,8 @@ export function Ocean() {
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },
-      uColorDeep: { value: new THREE.Color("#04101c") },
-      uColorShallow: { value: new THREE.Color("#2f7fae") },
-      uColorFoam: { value: new THREE.Color("#bcd9ea") },
+      uColorDeep: { value: new THREE.Color("#0a1628") },
+      uColorShallow: { value: new THREE.Color("#1a3a5c") },
     }),
     []
   );
@@ -79,13 +73,14 @@ export function Ocean() {
   });
 
   return (
-    <mesh rotation={[-Math.PI / 2.15, 0, 0]} position={[0, -1.3, 0]}>
-      <planeGeometry args={[60, 60, 180, 180]} />
+    <mesh rotation={[-Math.PI / 2.3, 0, 0]} position={[0, -0.6, 0]}>
+      <planeGeometry args={[40, 40, 140, 140]} />
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}
         uniforms={uniforms}
+        transparent
       />
     </mesh>
   );

@@ -1,15 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  --background: #060d16;
-  --surface: #0b1626;
-  --surface-raised: #101f34;
-  --foreground: #eef3f8;
-  --muted: #9fb0c3;
-  --accent: #4fa3d1;
-  --accent-soft: #244a68;
+  --background: #0a1628;
+  --surface: #0e1e35;
+  --surface-raised: #142943;
+  --foreground: #f5f0eb;
+  --muted: #aab6c4;
+  --accent: #2d5f8a;
+  --accent-soft: #1f3c56;
   --faroe-red: #c8262a;
-  --border: #1c2c42;
+  --border: #1d3350;
+  --faroe-gradient: linear-gradient(
+    to right,
+    #ffffff 20%,
+    #0065bd 20%,
+    #0065bd 40%,
+    #ed2939 40%,
+    #ed2939 60%,
+    #0065bd 60%,
+    #0065bd 80%,
+    #ffffff 80%
+  );
 }
 
 @theme inline {
@@ -53,4 +64,39 @@ body {
   .marquee {
     animation: none;
   }
+}
+
+.faroe-divider {
+  height: 10px;
+  width: 100%;
+  background: var(--faroe-gradient);
+  opacity: 0.35;
+}
+
+.faroe-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--faroe-gradient);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.btn-faroe {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 101, 189, 0.7),
+    rgba(237, 41, 57, 0.7)
+  );
+  transition: background 0.3s ease;
+}
+
+.btn-faroe:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 101, 189, 0.9),
+    rgba(237, 41, 57, 0.9)
+  );
 }

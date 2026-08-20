@@ -1,47 +1,34 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ReactNode, useRef } from "react";
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion } from "framer-motion";
+import { ReactNode } from "react";
 
 export function ScrollReveal({
   children,
   className,
   delay = 0,
-  y = 40,
+  y = 30,
+  bounce = false,
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
   y?: number;
+  bounce?: boolean;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      if (!ref.current) return;
-      gsap.from(ref.current, {
-        opacity: 0,
-        y,
-        duration: 0.9,
-        delay,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ref.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-      });
-    },
-    { scope: ref }
-  );
-
   return (
-    <div ref={ref} className={className}>
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={
+        bounce
+          ? { type: "spring", bounce: 0.45, duration: 0.9, delay }
+          : { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }
+      }
+    >
       {children}
-    </div>
+    </motion.div>
   );
 }

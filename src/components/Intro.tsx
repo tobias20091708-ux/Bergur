@@ -1,8 +1,3 @@
-import { ScrollReveal } from "./ScrollReveal";
-
-const DEFAULT_QUOTE =
-  "Jeg er færing og øboer. Min forskning handler om de steder, hvor havet møder fortællingen — de sidste vilde steder i en verden der har kortlagt alt.";
-
 const DEFAULT_BADGES = [
   "Lektor, Københavns Universitet",
   "15 mio. kr. — A.P. Møller Fonden (2023)",
@@ -22,10 +17,8 @@ const KEYWORDS = [
 ];
 
 export function Intro({
-  quote = DEFAULT_QUOTE,
   badges = DEFAULT_BADGES,
 }: {
-  quote?: string;
   badges?: string[];
 }) {
   return (
@@ -47,7 +40,7 @@ export function Intro({
           </div>
           <a
             href="#book"
-            className="rounded-full border border-border px-5 py-2 text-xs text-muted transition hover:border-accent hover:text-foreground"
+            className="rounded-md border border-border px-5 py-2 text-xs text-muted transition hover:border-accent hover:text-foreground"
           >
             Book foredrag →
           </a>
@@ -65,24 +58,6 @@ export function Intro({
           ))}
         </div>
       </div>
-
-      {/* Quote */}
-      <section className="relative overflow-hidden border-b border-border px-6 py-24 sm:px-12">
-        <img
-          src="/hav-baggrund.jpg"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-[rgba(6,13,22,0.86)]" />
-        <div className="relative mx-auto max-w-3xl">
-          <ScrollReveal>
-            <p className="text-balance font-serif text-2xl italic leading-relaxed text-foreground sm:text-3xl">
-              &ldquo;{quote}&rdquo;
-            </p>
-          </ScrollReveal>
-        </div>
-      </section>
     </>
   );
 }

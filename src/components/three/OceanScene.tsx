@@ -2,22 +2,20 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
-import { Cliffs } from "./Cliffs";
 import { Ocean } from "./Ocean";
 
 export function OceanScene() {
   return (
     <Canvas
-      camera={{ position: [0, 1.6, 6], fov: 50, near: 0.1, far: 60 }}
-      gl={{ antialias: true }}
-      dpr={[1, 1.75]}
+      camera={{ position: [0, 1.4, 5], fov: 45, near: 0.1, far: 50 }}
+      gl={{ antialias: true, alpha: true }}
+      dpr={[1, 1.5]}
+      style={{ pointerEvents: "none" }}
     >
-      <color attach="background" args={["#060d16"]} />
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[-4, 5, 2]} intensity={1.1} color="#bcd9ea" />
+      <ambientLight intensity={0.8} />
+      <directionalLight position={[-3, 4, 2]} intensity={0.6} color="#c7d9e8" />
       <Suspense fallback={null}>
         <Ocean />
-        <Cliffs />
       </Suspense>
     </Canvas>
   );
