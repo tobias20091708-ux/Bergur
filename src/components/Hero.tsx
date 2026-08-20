@@ -1,3 +1,5 @@
+import { HeroPortrait } from "./HeroPortrait";
+
 const DEFAULT_NAME = "Bergur Rønne Moberg";
 const DEFAULT_TAGLINE = "De vilde steder\nog den store poesi";
 const HERO_SUBTITLE =
@@ -29,12 +31,7 @@ export function Hero({
         style={{ background: "var(--faroe-gradient)" }}
       />
       <div className="relative z-10 flex h-full flex-col items-center justify-center gap-6 px-6 text-center text-white">
-        <img
-          src="/bergur-sejlads.jpg"
-          alt={name}
-          className="h-56 w-44 rounded-lg border border-white/20 object-cover shadow-2xl shadow-black/50 sm:h-64 sm:w-52"
-          style={{ objectPosition: "60% 25%" }}
-        />
+        <HeroPortrait alt={name} />
         <p className="text-xs uppercase tracking-[0.3em] text-white/70 sm:text-sm">
           {HERO_SUBTITLE}
         </p>
