@@ -1,5 +1,3 @@
-import { OceanBackground } from "./three/OceanBackground";
-
 const DEFAULT_NAME = "Bergur Rønne Moberg";
 const DEFAULT_TAGLINE = "De vilde steder\nog den store poesi";
 const HERO_SUBTITLE =
@@ -14,7 +12,16 @@ export function Hero({
 }) {
   return (
     <section id="hero" className="relative h-screen w-full overflow-hidden">
-      <OceanBackground />
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full object-cover"
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </video>
       <div className="absolute inset-0 bg-[rgba(6,13,22,0.55)]" />
       <div
         aria-hidden="true"
@@ -23,9 +30,10 @@ export function Hero({
       />
       <div className="relative z-10 flex h-full flex-col items-center justify-center gap-6 px-6 text-center text-white">
         <img
-          src="/bergur-portrait.png"
+          src="/bergur-sejlads.jpg"
           alt={name}
-          className="h-[200px] w-[200px] max-w-[200px] rounded-full object-cover grayscale"
+          className="h-56 w-44 rounded-lg border border-white/20 object-cover shadow-2xl shadow-black/50 sm:h-64 sm:w-52"
+          style={{ objectPosition: "60% 25%" }}
         />
         <p className="text-xs uppercase tracking-[0.3em] text-white/70 sm:text-sm">
           {HERO_SUBTITLE}
