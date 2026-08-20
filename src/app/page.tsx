@@ -19,11 +19,7 @@ export default async function Home() {
   return (
     <div className="flex flex-1 flex-col">
       <Header />
-      <Hero
-        eyebrow={content?.heroEyebrow}
-        title={content?.heroTitle}
-        tagline={content?.heroTagline}
-      />
+      <Hero name={content?.heroTitle} tagline={content?.heroTagline} />
       <Intro quote={content?.introQuote} badges={content?.introBadges} />
       <Foredrag entries={foredrag.length > 0 ? foredrag : undefined} />
       <HeinesenProject

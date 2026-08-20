@@ -2,7 +2,6 @@ import type { Image } from "sanity";
 import { client } from "./client";
 
 export type SiteContent = {
-  heroEyebrow?: string;
   heroTitle?: string;
   heroTagline?: string;
   introQuote?: string;

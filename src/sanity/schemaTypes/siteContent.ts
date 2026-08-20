@@ -14,14 +14,8 @@ export const siteContent = defineType({
   fields: [
     // Hero
     defineField({
-      name: "heroEyebrow",
-      title: "Overskrift over titlen",
-      type: "string",
-      group: "hero",
-    }),
-    defineField({
       name: "heroTitle",
-      title: "Hovedtitel",
+      title: "Navn",
       type: "string",
       group: "hero",
     }),
