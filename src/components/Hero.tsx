@@ -10,7 +10,20 @@ const OceanScene = dynamic(
   { ssr: false }
 );
 
-export function Hero() {
+const DEFAULT_EYEBROW = "Lektor, Københavns Universitet";
+const DEFAULT_TITLE = "De vilde steder og den store poesi";
+const DEFAULT_TAGLINE =
+  "Bergur Rønne Moberg — færøsk litteraturforsker, foredragsholder og Færøernes stemme i dansk kultur.";
+
+export function Hero({
+  eyebrow = DEFAULT_EYEBROW,
+  title = DEFAULT_TITLE,
+  tagline = DEFAULT_TAGLINE,
+}: {
+  eyebrow?: string;
+  title?: string;
+  tagline?: string;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -50,21 +63,19 @@ export function Hero() {
           data-hero-eyebrow
           className="mb-4 text-sm uppercase tracking-[0.3em] text-accent"
         >
-          Lektor, Københavns Universitet
+          {eyebrow}
         </p>
         <h1
           data-hero-title
           className="text-balance font-serif text-5xl italic leading-[1.05] text-foreground sm:text-7xl"
         >
-          De vilde steder og
-          <br /> den store poesi
+          {title}
         </h1>
         <p
           data-hero-tagline
           className="mt-6 max-w-xl text-lg text-muted sm:text-xl"
         >
-          Bergur Rønne Moberg — færøsk litteraturforsker, foredragsholder og
-          Færøernes stemme i dansk kultur.
+          {tagline}
         </p>
         <div className="mt-10 flex flex-wrap gap-4">
           <a

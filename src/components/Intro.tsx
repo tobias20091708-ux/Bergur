@@ -1,20 +1,27 @@
 import { ScrollReveal } from "./ScrollReveal";
 
-const badges = [
+const DEFAULT_QUOTE =
+  "Jeg er færing og øboer. Min forskning handler om de steder, hvor havet møder fortællingen — de sidste vilde steder i en verden der har kortlagt alt.";
+
+const DEFAULT_BADGES = [
   "Lektor, Københavns Universitet",
   "15 mio. kr. — A.P. Møller Fonden (2023)",
   "Grundlovstale, 5. juni 2026",
 ];
 
-export function Intro() {
+export function Intro({
+  quote = DEFAULT_QUOTE,
+  badges = DEFAULT_BADGES,
+}: {
+  quote?: string;
+  badges?: string[];
+}) {
   return (
     <section className="border-b border-border bg-background px-6 py-24 sm:px-12">
       <div className="mx-auto max-w-3xl">
         <ScrollReveal>
           <p className="text-balance font-serif text-2xl italic leading-relaxed text-foreground sm:text-3xl">
-            &ldquo;Jeg er færing og øboer. Min forskning handler om de
-            steder, hvor havet møder fortællingen — de sidste vilde steder i
-            en verden der har kortlagt alt.&rdquo;
+            &ldquo;{quote}&rdquo;
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.1}>

@@ -7,19 +7,42 @@ import { HeinesenProject } from "@/components/HeinesenProject";
 import { Hero } from "@/components/Hero";
 import { Intro } from "@/components/Intro";
 import { SocialProof } from "@/components/SocialProof";
+import { getForedrag, getSiteContent, getTestimonials } from "@/sanity/queries";
 
-export default function Home() {
+export default async function Home() {
+  const [content, foredrag, testimonials] = await Promise.all([
+    getSiteContent(),
+    getForedrag(),
+    getTestimonials(),
+  ]);
+
   return (
     <div className="flex flex-1 flex-col">
       <Header />
-      <Hero />
-      <Intro />
-      <Foredrag />
-      <HeinesenProject />
-      <SocialProof />
-      <About />
+      <Hero
+        eyebrow={content?.heroEyebrow}
+        title={content?.heroTitle}
+        tagline={content?.heroTagline}
+      />
+      <Intro quote={content?.introQuote} badges={content?.introBadges} />
+      <Foredrag entries={foredrag.length > 0 ? foredrag : undefined} />
+      <HeinesenProject
+        eyebrow={content?.heinesenEyebrow}
+        title={content?.heinesenTitle}
+        body={content?.heinesenBody}
+        image={content?.heinesenImage}
+      />
+      <SocialProof
+        testimonials={testimonials.length > 0 ? testimonials : undefined}
+      />
+      <About
+        eyebrow={content?.aboutEyebrow}
+        title={content?.aboutTitle}
+        body={content?.aboutBody}
+        facts={content?.aboutFacts}
+      />
       <Booking />
-      <Footer />
+      <Footer email={content?.footerEmail} />
     </div>
   );
 }

@@ -1,19 +1,26 @@
+import type { Testimonial } from "@/sanity/queries";
 import { ScrollReveal } from "./ScrollReveal";
 
-const placeholderQuotes = [
+const DEFAULT_TESTIMONIALS: Testimonial[] = [
   {
+    _id: "default-1",
     quote: "[Indsæt citat fra arrangør her]",
     name: "[Navn]",
     org: "[Organisation]",
   },
   {
+    _id: "default-2",
     quote: "[Indsæt citat fra arrangør her]",
     name: "[Navn]",
     org: "[Organisation]",
   },
 ];
 
-export function SocialProof() {
+export function SocialProof({
+  testimonials = DEFAULT_TESTIMONIALS,
+}: {
+  testimonials?: Testimonial[];
+}) {
   return (
     <section className="bg-surface px-6 py-24 sm:px-12">
       <div className="mx-auto max-w-6xl">
@@ -23,8 +30,8 @@ export function SocialProof() {
           </p>
         </ScrollReveal>
         <div className="mt-10 grid gap-6 sm:grid-cols-2">
-          {placeholderQuotes.map((q, i) => (
-            <ScrollReveal key={i} delay={i * 0.1}>
+          {testimonials.map((q, i) => (
+            <ScrollReveal key={q._id} delay={i * 0.1}>
               <blockquote className="rounded-2xl border border-dashed border-border bg-surface-raised p-8 text-muted">
                 <p className="font-serif italic text-foreground">
                   &ldquo;{q.quote}&rdquo;
