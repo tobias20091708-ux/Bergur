@@ -25,6 +25,24 @@ const DEFAULT_FOREDRAG: ForedragEntry[] = [
   },
 ];
 
+const BENEFITS = [
+  {
+    icon: "🏔️",
+    text: "Indblik i Færøernes forvandling fra isoleret ø-samfund til global kulturtrend",
+  },
+  {
+    icon: "📖",
+    text: "Fortællinger om nordisk litteraturs mest oversete mesterværker",
+  },
+  {
+    icon: "🎤",
+    text: "En engageret formidler der blander personlige historier med akademisk dybde",
+  },
+];
+
+const PRACTICAL_INFO =
+  "Varighed: 45–90 min. Velegnet til biblioteker, kulturhuse, festivaler, virksomheder og uddannelsesinstitutioner.";
+
 export function Foredrag({
   entries = DEFAULT_FOREDRAG,
 }: {
@@ -38,6 +56,25 @@ export function Foredrag({
             Foredrag
           </h2>
         </ScrollReveal>
+
+        <ScrollReveal delay={0.05}>
+          <p className="mt-10 text-sm uppercase tracking-[0.3em] text-accent">
+            Et foredrag med Bergur giver jeres publikum:
+          </p>
+        </ScrollReveal>
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          {BENEFITS.map((b, i) => (
+            <ScrollReveal key={b.text} delay={0.05 + i * 0.05}>
+              <div className="flex h-full items-start gap-3 rounded-2xl border border-border bg-surface-raised p-5">
+                <span className="text-xl" aria-hidden="true">
+                  {b.icon}
+                </span>
+                <p className="text-sm leading-relaxed text-muted">{b.text}</p>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+
         <div className="mt-12 grid gap-6 sm:grid-cols-3">
           {entries.map((f, i) => (
             <ScrollReveal key={f._id} delay={i * 0.1}>
@@ -51,11 +88,31 @@ export function Foredrag({
                 <p className="mt-4 flex-1 text-sm leading-relaxed text-muted">
                   {f.teaser}
                 </p>
+
+                <details className="group mt-4">
+                  <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-accent transition hover:text-foreground [&::-webkit-details-marker]:hidden">
+                    Læs mere
+                    <span
+                      aria-hidden="true"
+                      className="transition-transform duration-300 group-open:rotate-180"
+                    >
+                      ↓
+                    </span>
+                  </summary>
+                  <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-open:grid-rows-[1fr]">
+                    <div className="overflow-hidden">
+                      <p className="pt-3 text-sm leading-relaxed text-muted">
+                        {f.teaser} {PRACTICAL_INFO}
+                      </p>
+                    </div>
+                  </div>
+                </details>
+
                 <a
                   href="#book"
                   className="mt-6 inline-block text-sm font-medium text-accent transition hover:text-foreground"
                 >
-                  Forespørg på dette foredrag →
+                  Book dette foredrag →
                 </a>
               </article>
             </ScrollReveal>

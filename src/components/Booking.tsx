@@ -25,10 +25,31 @@ export function Booking() {
           <h2 className="mt-4 font-serif text-3xl italic text-foreground sm:text-4xl">
             Forespørg på dato og pris
           </h2>
-          <p className="mt-4 text-sm text-muted">
+          <p className="mt-4 text-sm text-foreground">
+            Selvfølgelig uden forpligtelser. Du vil hurtigt få tilbagemelding.
+          </p>
+          <p className="mt-2 text-sm text-muted">
             Bergur holder et begrænset antal foredrag uden for KU. Foredrag
             fra [XX.000 kr.] ekskl. moms og transport.
           </p>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.05} className="mt-8">
+          <div className="flex flex-wrap gap-4 text-xs text-muted sm:text-sm">
+            <a
+              href="#hero"
+              className="flex items-center gap-2 rounded-full border border-border bg-surface-raised px-4 py-2 transition hover:border-accent hover:text-foreground"
+            >
+              <span aria-hidden="true">▶</span> 1. Se Bergur fortælle
+            </a>
+            <span className="flex items-center gap-2 rounded-full border border-border bg-surface-raised px-4 py-2">
+              <span aria-hidden="true">📄</span> 2. Bed om pressekit i
+              beskeden nedenfor
+            </span>
+            <span className="flex items-center gap-2 rounded-full border border-accent bg-accent-soft px-4 py-2 text-foreground">
+              <span aria-hidden="true">✓</span> 3. Forespørg på dato og pris
+            </span>
+          </div>
         </ScrollReveal>
 
         <ScrollReveal delay={0.1} className="mt-10">
@@ -75,19 +96,34 @@ export function Booking() {
                 </label>
               </div>
               <label className="flex flex-col gap-2 text-sm text-muted">
-                Emne / foredrag
-                <input
+                Hvilket foredrag
+                <select
                   name="topic"
-                  type="text"
-                  placeholder="Fx “Det nye Færøerne”"
+                  defaultValue=""
                   className="rounded-lg border border-border bg-background px-4 py-3 text-foreground outline-none focus:border-accent"
-                />
+                >
+                  <option value="" disabled>
+                    Vælg et foredrag
+                  </option>
+                  <option value="kolde-oer-blev-cool">
+                    Kolde øer blev cool
+                  </option>
+                  <option value="to-kulturikoner">
+                    To kulturikoner, to øer
+                  </option>
+                  <option value="verdens-mest-oversete-forfatter">
+                    Verdens mest oversete forfatter
+                  </option>
+                  <option value="heinesen-hulen">Heinesen-hulen</option>
+                  <option value="andet">Andet/ved ikke endnu</option>
+                </select>
               </label>
               <label className="flex flex-col gap-2 text-sm text-muted">
                 Besked
                 <textarea
                   name="message"
                   rows={4}
+                  placeholder="Fx: “Vi vil gerne have jeres pressekit tilsendt” eller detaljer om jeres arrangement"
                   className="rounded-lg border border-border bg-background px-4 py-3 text-foreground outline-none focus:border-accent"
                 />
               </label>

@@ -3,7 +3,7 @@ import { ScrollReveal } from "./ScrollReveal";
 const DEFAULT_EYEBROW = "Om Bergur";
 const DEFAULT_TITLE = "Færøernes stemme i dansk kultur";
 const DEFAULT_BODY =
-  "Bergur Rønne Moberg (f. 1965, Færøerne) er lektor i nordisk litteratur ved Københavns Universitet og en af de førende forskere i færøsk og nordatlantisk litteratur — med et forfatterskab, der især har gjort sig bemærket gennem arbejdet om William Heinesen og Jørgen-Frantz Jacobsen.";
+  "Bergur Rønne Moberg (f. 1965, Færøerne) er forsker, kulturentreprenør og fortæller — lektor i nordisk litteratur ved Københavns Universitet og en af de førende stemmer inden for færøsk og nordatlantisk litteratur, med et forfatterskab der især har gjort sig bemærket gennem arbejdet om William Heinesen og Jørgen-Frantz Jacobsen.";
 
 const DEFAULT_FACTS = [
   "Ph.d. i Nordisk litteratur, KU (2004)",
@@ -28,24 +28,43 @@ export function About({
 }) {
   return (
     <section id="om-bergur" className="bg-background px-6 py-24 sm:px-12">
-      <div className="mx-auto grid max-w-6xl gap-12 sm:grid-cols-[1.2fr_1fr]">
+      <div className="mx-auto grid max-w-6xl gap-12 sm:grid-cols-[0.9fr_1.1fr]">
         <ScrollReveal>
-          <p className="text-sm uppercase tracking-[0.3em] text-accent">
-            {eyebrow}
-          </p>
-          <h2 className="mt-4 text-balance font-serif text-3xl italic text-foreground sm:text-4xl">
-            {title}
-          </h2>
-          <p className="mt-6 leading-relaxed text-muted">{body}</p>
+          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-border">
+            <img
+              src="/bergur-sejlads.jpg"
+              alt="Bergur Rønne Moberg til søs"
+              className="h-full w-full object-cover"
+            />
+          </div>
         </ScrollReveal>
-        <ScrollReveal delay={0.1}>
-          <ul className="space-y-3 border-l border-border pl-6 text-sm text-muted">
-            {facts.map((fact) => (
-              <li key={fact}>{fact}</li>
-            ))}
-          </ul>
-        </ScrollReveal>
+        <div>
+          <ScrollReveal>
+            <p className="text-sm uppercase tracking-[0.3em] text-accent">
+              {eyebrow}
+            </p>
+            <h2 className="mt-4 text-balance font-serif text-3xl italic text-foreground sm:text-4xl">
+              {title}
+            </h2>
+            <p className="mt-6 leading-relaxed text-muted">{body}</p>
+          </ScrollReveal>
+          <ScrollReveal delay={0.1}>
+            <ul className="mt-8 space-y-3 border-l border-border pl-6 text-sm text-muted">
+              {facts.map((fact) => (
+                <li key={fact}>{fact}</li>
+              ))}
+            </ul>
+          </ScrollReveal>
+        </div>
       </div>
+      <ScrollReveal delay={0.15} className="mt-14 text-center">
+        <a
+          href="#book"
+          className="inline-block rounded-full border border-border px-6 py-2.5 text-sm text-muted transition hover:border-accent hover:text-foreground"
+        >
+          Book foredrag →
+        </a>
+      </ScrollReveal>
     </section>
   );
 }

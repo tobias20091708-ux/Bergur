@@ -59,6 +59,14 @@ export function HeinesenProject({
           </a>
         </ScrollReveal>
       </div>
+      <ScrollReveal delay={0.15} className="mt-14 text-center">
+        <a
+          href="#book"
+          className="inline-block rounded-full border border-border px-6 py-2.5 text-sm text-muted transition hover:border-accent hover:text-foreground"
+        >
+          Book foredrag →
+        </a>
+      </ScrollReveal>
     </section>
   );
 }
