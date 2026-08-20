@@ -3,15 +3,15 @@ import { ScrollReveal } from "./ScrollReveal";
 const BENEFITS = [
   {
     number: "01",
-    text: "Indblik i Færøernes forvandling fra isoleret ø-samfund til global kulturtrend",
+    text: "Et indblik i, hvordan Færøerne gik fra et lukket ø-samfund til noget de fleste danskere efterhånden har en mening om",
   },
   {
     number: "02",
-    text: "Fortællinger om nordisk litteraturs mest oversete mesterværker",
+    text: "Historier om nogle af de bøger i nordisk litteratur, som færrest har læst",
   },
   {
     number: "03",
-    text: "En engageret formidler der blander personlige historier med akademisk dybde",
+    text: "En foredragsholder der blander egne oplevelser med den viden, han har brugt et helt liv på at samle",
   },
 ];
 
@@ -67,9 +67,10 @@ const TALKS: Talk[] = [
       "Foredraget fortæller historien om Heinesens værk og forbinder det med Heinesen-huleprojektet — et samarbejde med Henning Larsen Arkitekter om at skabe en fysisk hule i seks niveauer under den færøske jord, inspireret af Platons hulelignelse.",
     ],
     media: {
-      type: "image",
-      src: "/foredrag/verdens-mest-oversete.jpg",
-      position: "center 68%",
+      type: "video",
+      src: "/foredrag/torshavn.mp4",
+      poster: "/foredrag/torshavn-poster.jpg",
+      position: "center 55%",
     },
   },
 ];

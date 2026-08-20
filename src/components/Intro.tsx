@@ -1,19 +1,10 @@
+import { KeywordCycle } from "./KeywordCycle";
+
 const DEFAULT_BADGES = [
   "Lektor, Københavns Universitet",
   "15 mio. kr. — A.P. Møller Fonden (2023)",
   "Grundlovstale, 5. juni 2026",
   "Samarbejde med Henning Larsen Arkitekter",
-];
-
-const KEYWORDS = [
-  "Færøerne",
-  "William Heinesen",
-  "Nordisk litteratur",
-  "Foredrag",
-  "Heinesen-hulen",
-  "Kulturikoner",
-  "Nordatlantisk",
-  "H.C. Andersen",
 ];
 
 export function Intro({
@@ -47,16 +38,8 @@ export function Intro({
         </div>
       </section>
 
-      {/* Keyword marquee */}
-      <div className="overflow-hidden border-b border-border bg-background py-3">
-        <div className="marquee flex w-max shrink-0 gap-3 whitespace-nowrap text-xs uppercase tracking-[0.3em] text-muted/50 sm:text-sm">
-          {[...KEYWORDS, ...KEYWORDS].map((keyword, i) => (
-            <span key={i} className="flex items-center gap-3">
-              {keyword}
-              <span aria-hidden="true">·</span>
-            </span>
-          ))}
-        </div>
+      <div className="border-b border-border bg-background py-4">
+        <KeywordCycle />
       </div>
     </>
   );

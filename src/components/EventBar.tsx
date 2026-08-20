@@ -1,3 +1,5 @@
+import { Countdown } from "./Countdown";
+
 export function EventBar() {
   return (
     <div className="relative overflow-hidden border-b border-border">
@@ -12,6 +14,9 @@ export function EventBar() {
         <span>
           Næste foredrag: <span className="text-foreground">3. oktober 2026</span>{" "}
           — Folkeuniversitetet, København
+        </span>
+        <span className="text-accent">
+          (<Countdown />)
         </span>
         <a
           href="https://www.folkeuniversitetet.dk"

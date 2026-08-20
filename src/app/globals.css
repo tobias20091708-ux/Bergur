@@ -10,6 +10,8 @@
   --accent-soft: #1f3c56;
   --faroe-red: #c8262a;
   --border: #1d3350;
+  --font-serif: "Times New Roman", Times, "Liberation Serif", Georgia, serif;
+  --font-sans: Calibri, Candara, "Segoe UI", Optima, Arial, sans-serif;
   --faroe-gradient: linear-gradient(
     to right,
     #ffffff 20%,
@@ -45,25 +47,6 @@ body {
 
 .text-balance {
   text-wrap: balance;
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.marquee {
-  animation: marquee 32s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee {
-    animation: none;
-  }
 }
 
 .faroe-divider {

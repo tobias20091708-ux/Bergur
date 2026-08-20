@@ -6,7 +6,7 @@ import { ScrollReveal } from "./ScrollReveal";
 const DEFAULT_EYEBROW = "Heinesen-hulen";
 const DEFAULT_TITLE = "En hule, seks niveauer ned i den færøske undergrund";
 const DEFAULT_BODY =
-  "Henning Larsen Arkitekter har tegnet en fysisk version af Platons hulelignelse under Færøernes jord — og Bergur er manden bag idéen. Seks niveauer ned i klippen, med William Heinesens forfatterskab som det fortællende gulv under det hele.";
+  "Henning Larsen Arkitekter har tegnet en fysisk version af Platons hulelignelse under Færøernes jord — og Bergur er manden bag idéen. Seks niveauer ned i klippen, bygget op omkring William Heinesens forfatterskab.";
 
 export function HeinesenProject({
   eyebrow = DEFAULT_EYEBROW,

@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 const BASE_TILT = -0.18;
@@ -11,7 +11,13 @@ const HEIGHT = 1.9;
 const DEPTH = 0.12;
 
 function Book({ imageUrl }: { imageUrl: string }) {
-  const texture = useTexture(imageUrl);
+  const rawTexture = useTexture(imageUrl);
+  const texture = useMemo(() => {
+    const clone = rawTexture.clone();
+    clone.colorSpace = THREE.SRGBColorSpace;
+    clone.needsUpdate = true;
+    return clone;
+  }, [rawTexture]);
   const group = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
 
@@ -21,10 +27,6 @@ function Book({ imageUrl }: { imageUrl: string }) {
     const targetY = hovered ? 0.32 : BASE_TILT;
     g.rotation.y += (targetY - g.rotation.y) * 0.09;
   });
-
-  const edgeMaterial = (
-    <meshStandardMaterial color="#141f30" roughness={0.9} />
-  );
 
   return (
     <group
@@ -36,14 +38,15 @@ function Book({ imageUrl }: { imageUrl: string }) {
       }}
       onPointerOut={() => setHovered(false)}
     >
+      {/* BoxGeometry face order: [+x, -x, +y, -y, +z, -z] — +z faces the camera */}
       <mesh>
         <boxGeometry args={[WIDTH, HEIGHT, DEPTH]} />
-        {edgeMaterial}
-        {edgeMaterial}
-        {edgeMaterial}
-        {edgeMaterial}
-        <meshStandardMaterial map={texture} roughness={0.55} />
-        {edgeMaterial}
+        <meshStandardMaterial attach="material-0" color="#141f30" roughness={0.9} />
+        <meshStandardMaterial attach="material-1" color="#141f30" roughness={0.9} />
+        <meshStandardMaterial attach="material-2" color="#141f30" roughness={0.9} />
+        <meshStandardMaterial attach="material-3" color="#141f30" roughness={0.9} />
+        <meshStandardMaterial attach="material-4" map={texture} roughness={0.55} />
+        <meshStandardMaterial attach="material-5" color="#141f30" roughness={0.9} />
       </mesh>
     </group>
   );
