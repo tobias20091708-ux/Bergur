@@ -35,10 +35,13 @@ export function HeinesenProject({
                 className="object-cover"
               />
             ) : (
-              <div className="absolute inset-0 flex items-center justify-center text-center text-xs uppercase tracking-widest text-muted">
-                Visualisering fra Henning Larsen Arkitekter
-                <br />
-                indsættes her
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center">
+                <span className="text-2xl font-serif italic text-foreground/80">
+                  Platons hule
+                </span>
+                <span className="text-xs uppercase tracking-widest text-muted">
+                  Henning Larsen Arkitekter
+                </span>
               </div>
             )}
           </div>

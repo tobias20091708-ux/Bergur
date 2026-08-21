@@ -99,10 +99,10 @@ function TalkSection({ talk }: { talk: Talk }) {
               Book dette foredrag →
             </a>
             <a
-              href="#"
+              href="#book"
               className="rounded-md border border-border px-7 py-3 text-sm text-muted transition hover:border-accent hover:text-foreground"
             >
-              Download foredragsbeskrivelse (PDF) →
+              Forespørg på beskrivelse →
             </a>
           </div>
         </ScrollReveal>

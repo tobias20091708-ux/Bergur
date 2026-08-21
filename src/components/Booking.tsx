@@ -3,13 +3,32 @@
 import { FormEvent, useState } from "react";
 import { ScrollReveal } from "./ScrollReveal";
 
+const CONTACT_EMAIL = "kontakt@bergurmoberg.dk";
+
 export function Booking() {
   const [submitted, setSubmitted] = useState(false);
+  const [mailToUrl, setMailToUrl] = useState("");
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // TODO: wire up to a real backend (e.g. Resend, Formspree, or an API route).
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const lines = [
+      `Navn: ${data.get("name") || ""}`,
+      `E-mail: ${data.get("email") || ""}`,
+      `Organisation: ${data.get("organisation") || ""}`,
+      `Ønsket dato: ${data.get("date") || ""}`,
+      `Foredrag: ${data.get("topic") || ""}`,
+      `Besked: ${data.get("message") || ""}`,
+    ];
+    const subject = encodeURIComponent(
+      `Forespørgsel på foredrag — ${data.get("name") || ""}`,
+    );
+    const body = encodeURIComponent(lines.join("\n"));
+    setMailToUrl(`mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`);
     setSubmitted(true);
+    // Open the user's mail client with the prefilled enquiry.
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
   }
 
   return (
@@ -53,9 +72,38 @@ export function Booking() {
 
         <ScrollReveal delay={0.1} className="mt-10">
           {submitted ? (
-            <p className="rounded-lg border border-border bg-surface-raised p-8 text-foreground">
-              Tak for din forespørgsel — vi vender tilbage hurtigst muligt.
-            </p>
+            <div className="rounded-lg border border-border bg-surface-raised p-8 text-foreground">
+              <p className="font-medium">
+                Tak for din forespørgsel.
+              </p>
+              <p className="mt-3 text-sm text-muted">
+                Dit e-mailprogram åbner nu med en færdig e-mail til{" "}
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="text-accent underline"
+                >
+                  {CONTACT_EMAIL}
+                </a>
+                . Tryk på send i dit e-mailprogram for at aflevere henvendelsen.
+              </p>
+              <p className="mt-3 text-sm text-muted">
+                Åbnede e-mailen ikke?{" "}
+                <a
+                  href={mailToUrl}
+                  className="text-accent underline"
+                >
+                  Klik her for at åbne den igen
+                </a>
+                , eller skriv direkte til{" "}
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="text-accent underline"
+                >
+                  {CONTACT_EMAIL}
+                </a>
+                .
+              </p>
+            </div>
           ) : (
             <form onSubmit={handleSubmit} className="grid gap-5">
               <div className="grid gap-5 sm:grid-cols-2">
@@ -132,6 +180,17 @@ export function Booking() {
               >
                 Send forespørgsel
               </button>
+              <p className="mt-4 text-xs leading-relaxed text-muted">
+                Når du sender, åbnes dit e-mailprogram med en færdig besked til{" "}
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="text-accent underline"
+                >
+                  {CONTACT_EMAIL}
+                </a>
+                . Du kan også skrive direkte dertil. Vi behandler kun de
+                oplysninger, du selv opgiver, og videregiver dem ikke til tredjepart.
+              </p>
             </form>
           )}
         </ScrollReveal>

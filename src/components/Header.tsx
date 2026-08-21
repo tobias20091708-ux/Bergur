@@ -8,7 +8,7 @@ const links = [
 export function Header() {
   return (
     <header className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-6 py-6 sm:px-12">
-      <a href="#" className="font-serif text-lg italic text-foreground">
+      <a href="#hero" className="font-serif text-lg italic text-foreground">
         Bergur Rønne Moberg
       </a>
       <nav className="hidden gap-8 text-sm text-muted sm:flex">
