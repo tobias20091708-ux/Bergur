@@ -16,12 +16,20 @@ export function Footer({ email = DEFAULT_EMAIL }: { email?: string }) {
         style={{ background: "var(--faroe-gradient)" }}
       />
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
+        <div>
+          <p className="font-serif text-lg italic text-foreground">
+            Bergur Rønne Moberg
+          </p>
+          <p className="mt-1 text-sm text-muted">
+            De vilde steder og den store poesi
+          </p>
+        </div>
         <nav className="flex flex-wrap gap-x-6 gap-y-2 text-xs uppercase tracking-wide">
           {links.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="transition hover:text-accent"
+              className="transition hover:text-accent-text"
             >
               {link.label}
             </a>

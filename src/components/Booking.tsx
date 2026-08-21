@@ -1,15 +1,25 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useSyncExternalStore } from "react";
 import { ScrollReveal } from "./ScrollReveal";
+import { getSnapshot, getServerSnapshot, subscribe } from "@/lib/topicStore";
 
 export function Booking() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const prefilledTopic = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [topicOverride, setTopicOverride] = useState<string | null>(null);
+  const topic = topicOverride ?? prefilledTopic ?? "";
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // TODO: wire up to a real backend (e.g. Resend, Formspree, or an API route).
-    setSubmitted(true);
+    // TODO: wire up to a real backend (e.g. Resend, Formspree, or an API route) —
+    // this currently only simulates a send and does not deliver the enquiry.
+    setSubmitting(true);
+    window.setTimeout(() => {
+      setSubmitting(false);
+      setSubmitted(true);
+    }, 600);
   }
 
   return (
@@ -19,18 +29,16 @@ export function Booking() {
     >
       <div className="mx-auto max-w-2xl">
         <ScrollReveal>
-          <p className="text-sm uppercase tracking-[0.3em] text-accent">
+          <p className="text-sm uppercase tracking-[0.3em] text-accent-text">
             Book foredrag
           </p>
           <h2 className="mt-4 font-serif text-3xl italic text-foreground sm:text-4xl">
             Forespørg på dato og pris
           </h2>
-          <p className="mt-4 text-sm text-foreground">
-            Selvfølgelig uden forpligtelser. Du vil hurtigt få tilbagemelding.
-          </p>
-          <p className="mt-2 text-sm text-muted">
-            Bergur holder et begrænset antal foredrag uden for KU. Kontakt
-            for pris og tilgængelighed.
+          <p className="mt-4 max-w-lg text-base leading-relaxed text-muted sm:text-lg">
+            Bergur holder et begrænset antal foredrag uden for Københavns
+            Universitet. Send en uforpligtende forespørgsel, og få hurtigt
+            svar på pris og tilgængelighed.
           </p>
         </ScrollReveal>
 
@@ -95,10 +103,11 @@ export function Booking() {
                 </label>
               </div>
               <label className="flex flex-col gap-2 text-sm text-muted">
-                Hvilket foredrag
+                Vælg foredrag
                 <select
                   name="topic"
-                  defaultValue=""
+                  value={topic}
+                  onChange={(event) => setTopicOverride(event.target.value)}
                   className="rounded-lg border border-border bg-background px-4 py-3 text-foreground outline-none focus:border-accent"
                 >
                   <option value="" disabled>
@@ -126,14 +135,27 @@ export function Booking() {
                   className="rounded-lg border border-border bg-background px-4 py-3 text-foreground outline-none focus:border-accent"
                 />
               </label>
-              <button
-                type="submit"
-                className="btn-faroe mt-2 w-fit rounded-md px-8 py-3 text-sm font-medium text-white"
-              >
-                Send forespørgsel
-              </button>
+              <div className="mt-2 flex flex-wrap items-center gap-4">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="btn-faroe w-fit rounded-md px-8 py-3 text-sm font-medium text-white disabled:opacity-60"
+                >
+                  {submitting ? "Sender…" : "Send forespørgsel"}
+                </button>
+                <p className="text-xs text-muted">
+                  Uforpligtende forespørgsel. I modtager svar hurtigst
+                  muligt.
+                </p>
+              </div>
             </form>
           )}
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.15} className="mt-10 border-t border-border pt-6 text-sm text-muted">
+          <p>
+            kontakt@bergurmoberg.dk · Københavns Universitet
+          </p>
         </ScrollReveal>
       </div>
     </section>

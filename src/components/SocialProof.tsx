@@ -25,7 +25,7 @@ export function SocialProof({
     <section className="bg-surface px-6 py-32 sm:px-12">
       <div className="mx-auto max-w-6xl">
         <ScrollReveal>
-          <p className="text-sm uppercase tracking-[0.3em] text-accent">
+          <p className="text-sm uppercase tracking-[0.3em] text-accent-text">
             Udtalelser
           </p>
           <p className="mt-3 font-serif text-xl italic text-foreground">
@@ -38,7 +38,7 @@ export function SocialProof({
               <blockquote className="rounded-lg border border-border bg-surface-raised p-8 text-muted shadow-lg shadow-black/20">
                 <p
                   aria-hidden="true"
-                  className="tracking-widest text-accent"
+                  className="tracking-widest text-accent-text"
                 >
                   ★★★★★
                 </p>

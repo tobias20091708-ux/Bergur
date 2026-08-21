@@ -8,6 +8,7 @@
   --muted: #aab6c4;
   --accent: #2d5f8a;
   --accent-soft: #1f3c56;
+  --accent-text: #7fb2db;
   --faroe-red: #c8262a;
   --border: #1d3350;
   --faroe-gradient: linear-gradient(
@@ -31,6 +32,7 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-text: var(--accent-text);
   --color-faroe-red: var(--faroe-red);
   --color-border: var(--border);
   --font-sans: var(--font-sans);
@@ -41,6 +43,25 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Sticky header height — anchors must not land underneath it. */
+:root {
+  --header-height: 72px;
+}
+
+html {
+  scroll-padding-top: var(--header-height);
+}
+
+section[id] {
+  scroll-margin-top: var(--header-height);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 .text-balance {
@@ -80,6 +101,28 @@ body {
     rgba(0, 101, 189, 0.9),
     rgba(237, 41, 57, 0.9)
   );
+}
+
+@keyframes scroll-cue {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+
+.scroll-cue {
+  animation: scroll-cue 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue {
+    animation: none;
+  }
 }
 
 @keyframes ken-burns {

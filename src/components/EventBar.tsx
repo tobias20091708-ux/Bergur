@@ -18,14 +18,14 @@ export function EventBar() {
           Næste foredrag: <span className="text-foreground">3. oktober 2026</span>{" "}
           — Folkeuniversitetet, København
         </span>
-        <span className="text-accent">
+        <span className="text-accent-text">
           (<Countdown />)
         </span>
         <a
           href="https://www.folkeuniversitetet.dk"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-accent transition hover:text-foreground"
+          className="text-accent-text transition hover:text-foreground"
         >
           Læs mere om Folkeuniversitetet →
         </a>

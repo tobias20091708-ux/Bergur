@@ -47,7 +47,7 @@ export function About({
         </ScrollReveal>
         <div>
           <ScrollReveal>
-            <p className="text-sm uppercase tracking-[0.3em] text-accent">
+            <p className="text-sm uppercase tracking-[0.3em] text-accent-text">
               {eyebrow}
             </p>
             <h2 className="mt-4 text-balance font-serif text-3xl italic text-foreground sm:text-4xl">
@@ -61,9 +61,18 @@ export function About({
             </p>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <ul className="mt-8 space-y-3 border-l border-border pl-6 text-sm text-muted">
+            <h3 className="mt-10 text-xs uppercase tracking-[0.25em] text-muted">
+              Forskning, formidling og fortælling
+            </h3>
+            <ul className="mt-4 grid gap-x-8 gap-y-3 border-t border-border pt-5 text-sm text-muted sm:grid-cols-2">
               {facts.map((fact) => (
-                <li key={fact}>{fact}</li>
+                <li key={fact} className="flex gap-3">
+                  <span
+                    aria-hidden="true"
+                    className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent-text"
+                  />
+                  {fact}
+                </li>
               ))}
             </ul>
           </ScrollReveal>

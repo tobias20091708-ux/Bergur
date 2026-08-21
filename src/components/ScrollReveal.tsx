@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ReactNode } from "react";
 
 export function ScrollReveal({
@@ -16,16 +16,21 @@ export function ScrollReveal({
   y?: number;
   bounce?: boolean;
 }) {
+  const reduceMotion = useReducedMotion();
+  const offset = reduceMotion ? 0 : y;
+
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y }}
+      initial={{ opacity: 0, y: offset }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={
-        bounce
-          ? { type: "spring", bounce: 0.45, duration: 0.9, delay }
-          : { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }
+        reduceMotion
+          ? { duration: 0.01 }
+          : bounce
+            ? { type: "spring", bounce: 0.45, duration: 0.9, delay }
+            : { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }
       }
     >
       {children}

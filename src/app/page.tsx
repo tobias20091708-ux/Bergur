@@ -8,7 +8,6 @@ import { Foredrag } from "@/components/Foredrag";
 import { Header } from "@/components/Header";
 import { HeinesenProject } from "@/components/HeinesenProject";
 import { Hero } from "@/components/Hero";
-import { Intro } from "@/components/Intro";
 import { getSiteContent } from "@/sanity/queries";
 
 export default async function Home() {
@@ -17,9 +16,12 @@ export default async function Home() {
   return (
     <div className="flex flex-1 flex-col">
       <Header />
-      <Hero name={content?.heroTitle} tagline={content?.heroTagline} />
+      <Hero
+        name={content?.heroTitle}
+        tagline={content?.heroTagline}
+        facts={content?.introBadges}
+      />
       <EventBar />
-      <Intro badges={content?.introBadges} />
       <About
         eyebrow={content?.aboutEyebrow}
         title={content?.aboutTitle}
