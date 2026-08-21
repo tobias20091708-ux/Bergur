@@ -14,16 +14,12 @@ export function Hero({
 }) {
   return (
     <section id="hero" className="relative h-screen w-full overflow-hidden">
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
+      <img
+        src="/hav-baggrund.jpg"
+        alt=""
         aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover"
-      >
-        <source src="/hero-video.mp4" type="video/mp4" />
-      </video>
+        className="ken-burns absolute inset-0 h-full w-full object-cover"
+      />
       <div className="absolute inset-0 bg-[rgba(6,13,22,0.55)]" />
       <div
         aria-hidden="true"

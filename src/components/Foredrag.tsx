@@ -23,9 +23,7 @@ type Talk = {
   title: string;
   subtitle: string;
   paragraphs: string[];
-  media:
-    | { type: "image"; src: string; position: string }
-    | { type: "video"; src: string; poster: string; position: string };
+  media: { src: string; position: string };
 };
 
 const TALKS: Talk[] = [
@@ -37,12 +35,7 @@ const TALKS: Talk[] = [
       "Turisme, gastronomi og kultur — et indblik i den moderne færøske identitet. Hvordan blev et af Nordens mindste og mest isolerede samfund til en global kulturtrend?",
       "Foredraget tager publikum med fra de traditionsrige grindedrab og uldne sweatere til KOKS-restauranten, G!-festivalen og den nye bølge af færøsk film og musik. Ikke som en turistbrochure, men som en fortælling om hvad der sker, når en lille kultur pludselig bliver set.",
     ],
-    media: {
-      type: "video",
-      src: "/foredrag/faar-graesning.mp4",
-      poster: "/foredrag/kolde-oer-blev-cool.jpg",
-      position: "center 55%",
-    },
+    media: { src: "/foredrag/kolde-oer-blev-cool.jpg", position: "center 65%" },
   },
   {
     eyebrow: "Foredrag 02",
@@ -52,11 +45,7 @@ const TALKS: Talk[] = [
       "Hvad har Danmarks mest kendte forfatter og Færøernes mest oversete til fælles? Mere end man tror. Begge skrev fra periferien ind mod centret. Begge brugte eventyret som form.",
       "Og begge blev verdensberømte — den ene i sin levetid, den anden aldrig helt. Foredraget er en sammenligning af to forfatterskaber, to øsamfund og et fælles blik på det store i det små.",
     ],
-    media: {
-      type: "image",
-      src: "/foredrag/to-kulturikoner.jpg",
-      position: "center 45%",
-    },
+    media: { src: "/foredrag/to-kulturikoner.jpg", position: "center 45%" },
   },
   {
     eyebrow: "Foredrag 03",
@@ -66,41 +55,21 @@ const TALKS: Talk[] = [
       "William Heinesen er Færøernes største forfatter — og en af Nordens mest oversete. Han skrev på dansk, boede hele sit liv i Tórshavn og skabte et forfatterskab der spænder fra kosmisk humor til eksistentiel alvor.",
       "Foredraget fortæller historien om Heinesens værk og forbinder det med Heinesen-huleprojektet — et samarbejde med Henning Larsen Arkitekter om at skabe en fysisk hule i seks niveauer under den færøske jord, inspireret af Platons hulelignelse.",
     ],
-    media: {
-      type: "video",
-      src: "/foredrag/torshavn.mp4",
-      poster: "/foredrag/torshavn-poster.jpg",
-      position: "center 55%",
-    },
+    media: { src: "/foredrag/torshavn-poster.jpg", position: "center 55%" },
   },
 ];
 
 function TalkSection({ talk }: { talk: Talk }) {
   return (
     <div className="flex min-h-screen flex-col sm:flex-row">
-      <div className="relative h-[40vh] w-full sm:h-auto sm:w-1/2 sm:min-h-screen">
-        {talk.media.type === "video" ? (
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster={talk.media.poster}
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ objectPosition: talk.media.position }}
-          >
-            <source src={talk.media.src} type="video/mp4" />
-          </video>
-        ) : (
-          <img
-            src={talk.media.src}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ objectPosition: talk.media.position }}
-          />
-        )}
+      <div className="relative h-[40vh] w-full overflow-hidden sm:h-auto sm:w-1/2 sm:min-h-screen">
+        <img
+          src={talk.media.src}
+          alt=""
+          aria-hidden="true"
+          className="ken-burns absolute inset-0 h-full w-full object-cover"
+          style={{ objectPosition: talk.media.position }}
+        />
       </div>
       <div className="flex w-full items-center bg-surface sm:w-1/2">
         <ScrollReveal className="px-6 py-16 sm:px-20 sm:py-24">

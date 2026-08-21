@@ -10,8 +10,6 @@
   --accent-soft: #1f3c56;
   --faroe-red: #c8262a;
   --border: #1d3350;
-  --font-serif: "Times New Roman", Times, "Liberation Serif", Georgia, serif;
-  --font-sans: Calibri, Candara, "Segoe UI", Optima, Arial, sans-serif;
   --faroe-gradient: linear-gradient(
     to right,
     #ffffff 20%,
@@ -82,4 +80,23 @@ body {
     rgba(0, 101, 189, 0.9),
     rgba(237, 41, 57, 0.9)
   );
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.ken-burns {
+  animation: ken-burns 40s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ken-burns {
+    animation: none;
+  }
 }

@@ -9,14 +9,10 @@ import { Header } from "@/components/Header";
 import { HeinesenProject } from "@/components/HeinesenProject";
 import { Hero } from "@/components/Hero";
 import { Intro } from "@/components/Intro";
-import { SocialProof } from "@/components/SocialProof";
-import { getSiteContent, getTestimonials } from "@/sanity/queries";
+import { getSiteContent } from "@/sanity/queries";
 
 export default async function Home() {
-  const [content, testimonials] = await Promise.all([
-    getSiteContent(),
-    getTestimonials(),
-  ]);
+  const content = await getSiteContent();
 
   return (
     <div className="flex flex-1 flex-col">
@@ -40,9 +36,7 @@ export default async function Home() {
         image={content?.heinesenImage}
       />
       <Books />
-      <SocialProof
-        testimonials={testimonials.length > 0 ? testimonials : undefined}
-      />
+      {/* SocialProof intentionally hidden until real testimonials are supplied — see CLAUDE.md */}
       <Booking />
       <Footer email={content?.footerEmail} />
     </div>

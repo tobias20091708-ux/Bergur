@@ -29,8 +29,8 @@ export function Booking() {
             Selvfølgelig uden forpligtelser. Du vil hurtigt få tilbagemelding.
           </p>
           <p className="mt-2 text-sm text-muted">
-            Bergur holder et begrænset antal foredrag uden for KU. Foredrag
-            fra [XX.000 kr.] ekskl. moms og transport.
+            Bergur holder et begrænset antal foredrag uden for KU. Kontakt
+            for pris og tilgængelighed.
           </p>
         </ScrollReveal>
 

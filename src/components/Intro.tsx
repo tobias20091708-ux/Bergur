@@ -1,4 +1,4 @@
-import { KeywordCycle } from "./KeywordCycle";
+import { SubNav } from "./SubNav";
 
 const DEFAULT_BADGES = [
   "Lektor, Københavns Universitet",
@@ -38,9 +38,7 @@ export function Intro({
         </div>
       </section>
 
-      <div className="border-b border-border bg-background py-4">
-        <KeywordCycle />
-      </div>
+      <SubNav />
     </>
   );
 }

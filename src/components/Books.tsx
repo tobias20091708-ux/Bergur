@@ -40,7 +40,7 @@ const BOOKS = [
 
 export function Books() {
   return (
-    <section className="bg-surface px-6 py-32 sm:px-12">
+    <section id="boeger" className="bg-surface px-6 py-32 sm:px-12">
       <div className="mx-auto max-w-6xl">
         <ScrollReveal>
           <p className="text-sm uppercase tracking-[0.3em] text-accent">
