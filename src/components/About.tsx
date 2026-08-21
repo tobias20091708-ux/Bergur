@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ScrollReveal } from "./ScrollReveal";
 
 const DEFAULT_EYEBROW = "Om Bergur";
@@ -35,10 +36,12 @@ export function About({
       <div className="mx-auto grid max-w-6xl gap-12 sm:grid-cols-[0.9fr_1.1fr]">
         <ScrollReveal>
           <div className="relative aspect-[4/5] overflow-hidden rounded-lg border border-border">
-            <img
+            <Image
               src="/bergur-sejlads.jpg"
               alt="Bergur Rønne Moberg til søs"
-              className="h-full w-full object-cover"
+              fill
+              sizes="(min-width: 640px) 45vw, 100vw"
+              className="object-cover"
             />
           </div>
         </ScrollReveal>

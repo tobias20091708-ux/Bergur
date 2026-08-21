@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ScrollReveal } from "./ScrollReveal";
 
 const BENEFITS = [
@@ -63,11 +64,13 @@ function TalkSection({ talk }: { talk: Talk }) {
   return (
     <div className="flex min-h-screen flex-col sm:flex-row">
       <div className="relative h-[40vh] w-full overflow-hidden sm:h-auto sm:w-1/2 sm:min-h-screen">
-        <img
+        <Image
           src={talk.media.src}
           alt=""
           aria-hidden="true"
-          className="ken-burns absolute inset-0 h-full w-full object-cover"
+          fill
+          sizes="(min-width: 640px) 50vw, 100vw"
+          className="ken-burns object-cover"
           style={{ objectPosition: talk.media.position }}
         />
       </div>

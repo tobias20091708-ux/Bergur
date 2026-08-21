@@ -1,13 +1,16 @@
+import Image from "next/image";
 import { Countdown } from "./Countdown";
 
 export function EventBar() {
   return (
     <div className="relative overflow-hidden border-b border-border">
-      <img
+      <Image
         src="/hav-baggrund.jpg"
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover opacity-20"
+        fill
+        sizes="100vw"
+        className="object-cover opacity-20"
       />
       <div className="absolute inset-0 bg-background/90" />
       <div className="relative mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-3 gap-y-1 px-6 py-3 text-center text-xs text-muted sm:text-sm">
@@ -24,7 +27,7 @@ export function EventBar() {
           rel="noopener noreferrer"
           className="text-accent transition hover:text-foreground"
         >
-          Læs mere →
+          Læs mere om Folkeuniversitetet →
         </a>
       </div>
     </div>

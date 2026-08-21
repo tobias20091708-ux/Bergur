@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { HeroPortrait } from "./HeroPortrait";
 
 const DEFAULT_NAME = "Bergur Rønne Moberg";
@@ -14,11 +15,14 @@ export function Hero({
 }) {
   return (
     <section id="hero" className="relative h-screen w-full overflow-hidden">
-      <img
+      <Image
         src="/hav-baggrund.jpg"
         alt=""
         aria-hidden="true"
-        className="ken-burns absolute inset-0 h-full w-full object-cover"
+        fill
+        priority
+        sizes="100vw"
+        className="ken-burns object-cover"
       />
       <div className="absolute inset-0 bg-[rgba(6,13,22,0.55)]" />
       <div

@@ -15,10 +15,30 @@ const fraunces = Fraunces({
   style: ["normal", "italic"],
 });
 
+const SITE_URL = "https://bergur.vercel.app";
+const TITLE = "Bergur Rønne Moberg — De vilde steder og den store poesi";
+const DESCRIPTION =
+  "Bergur Rønne Moberg er lektor i nordisk litteratur ved Københavns Universitet og foredragsholder om Færøerne, William Heinesen og den nordatlantiske litteratur.";
+
 export const metadata: Metadata = {
-  title: "Bergur Rønne Moberg — De vilde steder og den store poesi",
-  description:
-    "Bergur Rønne Moberg er lektor i nordisk litteratur ved Københavns Universitet og foredragsholder om Færøerne, William Heinesen og den nordatlantiske litteratur.",
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: TITLE,
+    description:
+      "Færøernes stemme i dansk kultur — forsker, kulturentreprenør, fortæller.",
+    url: SITE_URL,
+    type: "website",
+    locale: "da_DK",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

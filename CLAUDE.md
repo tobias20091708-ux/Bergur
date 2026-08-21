@@ -118,6 +118,38 @@ see "Placeholder content" below.
 - Footer email is displayed as-is; confirm the domain is actually live
   before treating it as a working contact address.
 
+## SEO
+
+- **This site has exactly two routes: `/` and `/studio/[[...tool]]`.** No
+  `/om-bergur`, `/foredrag`, `/heinesen-hulen`, `/boger`, or `/kontakt` —
+  those are anchor sections (`#om-bergur` etc.) within the single page, not
+  separate routes. An SEO brief assumed these were 5 real pages and that
+  their 404s were "broken links to fix" — they weren't broken links, the
+  brief's premise was just wrong. If a future brief/tool assumes a
+  multi-page structure, check this before implementing anything against it.
+- `src/app/robots.ts` and `src/app/sitemap.ts` use Next's native Metadata
+  API routes (not the `next-sitemap` package — unnecessary dependency for
+  a single real URL). `/studio` is disallowed in robots.txt and already
+  has `robots: { index: false, follow: false }` in its own layout metadata.
+- `layout.tsx` sets `metadataBase`, `alternates.canonical`, and `openGraph`.
+  The canonical tag also covers a real duplicate-content issue: three
+  Vercel domains (`bergur.vercel.app`,
+  `bergur-tobias-projects8.vercel.app`,
+  `bergur-git-main-tobias-projects8.vercel.app`) all serve identical
+  content — canonical always points at the primary domain regardless of
+  which alias served the request.
+- **All images use `next/image`**, not raw `<img>` — this was the actual
+  Core Web Vitals fix, not 3D loading (the 3D book covers were already
+  lazy/deferred/below-fold and not a plausible LCP cause). The site's
+  images were up to 1.8MB unoptimized JPEGs; `next/image` cuts real
+  transferred bytes by ~89% via responsive `srcset` + automatic
+  AVIF/WebP — verified directly (996KB → 105KB, 1.5MB → 168KB at typical
+  render widths). `HeroPortrait.tsx` combines this with Framer Motion by
+  animating a wrapping `motion.div` rather than trying to animate the
+  `Image` component directly. When adding new images, always use
+  `next/image` (`fill` + a `relative`+sized parent for cover-style
+  backgrounds) from the start.
+
 ## Competitive reference
 
 naujalynge.dk (Nauja Lynge — Greenland/Arctic speaker, same "Nordic
