@@ -4,18 +4,18 @@ import { ScrollReveal } from "./ScrollReveal";
 const DEFAULT_EYEBROW = "Om Bergur";
 const DEFAULT_TITLE = "Færøernes stemme i dansk kultur";
 const DEFAULT_BODY =
-  "Bergur Rønne Moberg er født på Færøerne i 1965 og har brugt det meste af et liv på at læse verden derfra — fra periferien, hvor han mener de bedste historier bliver fortalt. I dag er han lektor i nordisk litteratur ved Københavns Universitet, men det er stadig øerne der driver værket: William Heinesens forfatterskab, Jørgen-Frantz Jacobsens efterladte roman, og den litteratur der findes i verdens mindste sprog.";
+  "Bergur Rønne Moberg er født på Færøerne i 1965 og har brugt det meste af et liv på at læse verden derfra — fra periferien, hvor han mener de bedste historier bliver fortalt. I dag er han lektor i nordisk litteratur ved Københavns Universitet med speciale i færøsk litteratur, men det er stadig øerne der driver værket: William Heinesens forfatterskab, Jørgen-Frantz Jacobsens efterladte roman, og den litteratur der findes i verdens mindste sprog.";
 const DEFAULT_QUOTE =
   "Jeg er færing og øboer. Min forskning handler om de steder, hvor havet møder fortællingen — de sidste vilde steder i en verden der har kortlagt alt.";
 
 const DEFAULT_FACTS = [
-  "Ph.d. i Nordisk litteratur, KU (2004)",
-  "Mag.art. i Nordisk litteratur, KU (1997)",
-  "Seniorstipendiat/forskningslektor, KU (2016–)",
-  '"Ultraminor World Literatures" (2022)',
-  '"Resten i Vesten" (m. David Damrosch)',
+  "Ph.d. i Nordisk litteratur, Københavns Universitet (2004)",
+  "Mag.art. i Nordisk litteratur, Københavns Universitet (1997)",
+  "Visiting Scholar, Institute for World Literature, Harvard University (2013)",
+  "Lektor i nordisk litteratur, Københavns Universitet",
+  '"Ultraminor World Literatures" (2022, m. David Damrosch)',
+  '"Resten i Vesten — Verdenslitteratur i modernismens margin" (2013)',
   'Redaktør, "Barbara i høj sø" (2025, Multivers)',
-  "Ny bog 2026 via Ipi Press",
 ];
 
 export function About({
@@ -75,6 +75,27 @@ export function About({
                 </li>
               ))}
             </ul>
+            <p className="mt-6 text-sm text-muted">
+              Læs mere om Bergurs forskning og publikationer på hans{" "}
+              <a
+                href="https://researchprofiles.ku.dk/da/persons/bergur-r%C3%B8nne-moberg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent-text underline"
+              >
+                officielle forskerprofil på Københavns Universitet
+              </a>
+              , eller hør hans{" "}
+              <a
+                href="https://www.dansketaler.dk/taler/moberg-bergur-ronne"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent-text underline"
+              >
+                taler på Danske Taler
+              </a>
+              .
+            </p>
           </ScrollReveal>
         </div>
       </div>

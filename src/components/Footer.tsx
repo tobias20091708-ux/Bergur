@@ -38,7 +38,10 @@ export function Footer({ email = DEFAULT_EMAIL }: { email?: string }) {
         <div className="flex flex-col items-start justify-between gap-2 border-t border-border pt-6 sm:flex-row sm:items-center">
           <p>© {new Date().getFullYear()} Bergur Rønne Moberg</p>
           <p>
-            {email} · Københavns Universitet
+            <a href={`mailto:${email}`} className="underline transition hover:text-accent-text">
+              {email}
+            </a>{" "}
+            · Københavns Universitet
           </p>
         </div>
       </div>

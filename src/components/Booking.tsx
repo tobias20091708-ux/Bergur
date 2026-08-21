@@ -23,7 +23,7 @@ export function Booking() {
   const topic = topicOverride ?? prefilledTopic ?? "";
 
   // TODO: wire up to a real backend (e.g. Resend, Formspree, or an API
-  // route). Until then, submitting builds a prefilled mailto: link instead
+  // route). Until then, submitting opens a prefilled mailto: link instead
   // of pretending to deliver the enquiry — see CLAUDE.md.
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -45,13 +45,15 @@ export function Booking() {
     lines.push("", message);
     const body = lines.join("\n");
 
-    setMailtoHref(
-      `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    );
+    const href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setMailtoHref(href);
     setSubmitting(true);
     window.setTimeout(() => {
       setSubmitting(false);
       setSubmitted(true);
+      // Open the visitor's own mail client with the prefilled enquiry —
+      // the button below does the same, in case this gets blocked.
+      window.location.href = href;
     }, 400);
   }
 
@@ -95,9 +97,14 @@ export function Booking() {
         <ScrollReveal delay={0.1} className="mt-10">
           {submitted ? (
             <div className="rounded-lg border border-border bg-surface-raised p-8 text-foreground">
-              <p>
-                Formularen er endnu ikke forbundet til en mailserver — men
-                jeres oplysninger er samlet i en mail, klar til at sende.
+              <p className="font-medium">Tak for din forespørgsel.</p>
+              <p className="mt-3 text-sm text-muted">
+                Dit e-mailprogram åbner nu med en færdig besked til{" "}
+                <a href={`mailto:${CONTACT_EMAIL}`} className="text-accent-text hover:text-foreground">
+                  {CONTACT_EMAIL}
+                </a>
+                . Tryk på send i dit e-mailprogram for at aflevere
+                henvendelsen.
               </p>
               <a
                 href={mailtoHref ?? `mailto:${CONTACT_EMAIL}`}
@@ -106,7 +113,7 @@ export function Booking() {
                 Åbn og send mail til Bergur →
               </a>
               <p className="mt-4 text-sm text-muted">
-                Virker linket ikke i din mailklient, så skriv direkte til{" "}
+                Åbnede e-mailprogrammet ikke, så skriv direkte til{" "}
                 <a href={`mailto:${CONTACT_EMAIL}`} className="text-accent-text hover:text-foreground">
                   {CONTACT_EMAIL}
                 </a>
@@ -197,6 +204,11 @@ export function Booking() {
                   muligt.
                 </p>
               </div>
+              <p className="text-xs leading-relaxed text-muted">
+                Når du sender, åbnes dit e-mailprogram med en færdig besked
+                til {CONTACT_EMAIL}. Vi behandler kun de oplysninger, du
+                selv opgiver, og videregiver dem ikke til tredjepart.
+              </p>
             </form>
           )}
         </ScrollReveal>
