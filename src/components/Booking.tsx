@@ -4,22 +4,55 @@ import { FormEvent, useState, useSyncExternalStore } from "react";
 import { ScrollReveal } from "./ScrollReveal";
 import { getSnapshot, getServerSnapshot, subscribe } from "@/lib/topicStore";
 
+const CONTACT_EMAIL = "kontakt@bergurmoberg.dk";
+
+const TOPIC_LABELS: Record<string, string> = {
+  "kolde-oer-blev-cool": "Kolde øer blev cool",
+  "to-kulturikoner": "To kulturikoner, to øer",
+  "verdens-mest-oversete-forfatter": "Verdens mest oversete forfatter",
+  "heinesen-hulen": "Heinesen-hulen",
+  andet: "Andet/ved ikke endnu",
+};
+
 export function Booking() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [mailtoHref, setMailtoHref] = useState<string | null>(null);
   const prefilledTopic = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [topicOverride, setTopicOverride] = useState<string | null>(null);
   const topic = topicOverride ?? prefilledTopic ?? "";
 
+  // TODO: wire up to a real backend (e.g. Resend, Formspree, or an API
+  // route). Until then, submitting builds a prefilled mailto: link instead
+  // of pretending to deliver the enquiry — see CLAUDE.md.
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // TODO: wire up to a real backend (e.g. Resend, Formspree, or an API route) —
-    // this currently only simulates a send and does not deliver the enquiry.
+    const data = new FormData(event.currentTarget);
+    const name = String(data.get("name") ?? "");
+    const email = String(data.get("email") ?? "");
+    const organisation = String(data.get("organisation") ?? "");
+    const date = String(data.get("date") ?? "");
+    const selectedTopic = String(data.get("topic") ?? "");
+    const message = String(data.get("message") ?? "");
+
+    const subject = `Foredragsforespørgsel${organisation ? ` — ${organisation}` : ""}`;
+    const lines = [`Navn: ${name}`, `E-mail: ${email}`];
+    if (organisation) lines.push(`Organisation: ${organisation}`);
+    if (date) lines.push(`Ønsket dato: ${date}`);
+    if (selectedTopic) {
+      lines.push(`Foredrag: ${TOPIC_LABELS[selectedTopic] ?? selectedTopic}`);
+    }
+    lines.push("", message);
+    const body = lines.join("\n");
+
+    setMailtoHref(
+      `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    );
     setSubmitting(true);
     window.setTimeout(() => {
       setSubmitting(false);
       setSubmitted(true);
-    }, 600);
+    }, 400);
   }
 
   return (
@@ -61,9 +94,25 @@ export function Booking() {
 
         <ScrollReveal delay={0.1} className="mt-10">
           {submitted ? (
-            <p className="rounded-lg border border-border bg-surface-raised p-8 text-foreground">
-              Tak for din forespørgsel — vi vender tilbage hurtigst muligt.
-            </p>
+            <div className="rounded-lg border border-border bg-surface-raised p-8 text-foreground">
+              <p>
+                Formularen er endnu ikke forbundet til en mailserver — men
+                jeres oplysninger er samlet i en mail, klar til at sende.
+              </p>
+              <a
+                href={mailtoHref ?? `mailto:${CONTACT_EMAIL}`}
+                className="btn-faroe mt-5 inline-block rounded-md px-7 py-3 text-sm font-medium text-white"
+              >
+                Åbn og send mail til Bergur →
+              </a>
+              <p className="mt-4 text-sm text-muted">
+                Virker linket ikke i din mailklient, så skriv direkte til{" "}
+                <a href={`mailto:${CONTACT_EMAIL}`} className="text-accent-text hover:text-foreground">
+                  {CONTACT_EMAIL}
+                </a>
+                .
+              </p>
+            </div>
           ) : (
             <form onSubmit={handleSubmit} className="grid gap-5">
               <div className="grid gap-5 sm:grid-cols-2">

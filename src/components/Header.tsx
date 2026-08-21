@@ -10,6 +10,8 @@ const LINKS = [
   { href: "#book", label: "Kontakt", id: "book" },
 ];
 
+const LINK_IDS = LINKS.map((l) => l.id);
+
 function useScrolled(threshold = 40) {
   const subscribe = useCallback((callback: () => void) => {
     window.addEventListener("scroll", callback, { passive: true });
@@ -25,27 +27,24 @@ function useScrolled(threshold = 40) {
 }
 
 function useActiveSection(ids: string[]) {
-  const subscribe = useCallback(
-    (callback: () => void) => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) {
-              activeSection = entry.target.id;
-            }
+  const subscribe = useCallback((callback: () => void) => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            activeSection = entry.target.id;
           }
-          callback();
-        },
-        { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
-      );
-      for (const id of ids) {
-        const el = document.getElementById(id);
-        if (el) observer.observe(el);
-      }
-      return () => observer.disconnect();
-    },
-    [ids]
-  );
+        }
+        callback();
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    );
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    }
+    return () => observer.disconnect();
+  }, [ids]);
   const getSnapshot = useCallback(() => activeSection, []);
   const getServerSnapshot = useCallback(() => null, []);
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
@@ -58,11 +57,11 @@ let activeSection: string | null = null;
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const scrolled = useScrolled();
-  const active = useActiveSection(LINKS.map((l) => l.id));
+  const active = useActiveSection(LINK_IDS);
 
   return (
     <header
-      className={`sticky top-0 z-40 transition-colors duration-300 ${
+      className={`fixed inset-x-0 top-0 z-40 transition-colors duration-300 ${
         scrolled || menuOpen
           ? "border-b border-border bg-background/95 backdrop-blur-sm"
           : "border-b border-transparent bg-transparent"

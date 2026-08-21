@@ -61,10 +61,31 @@ Booking → Footer.
 `Intro.tsx` and `SubNav.tsx` were removed — they duplicated `Header`'s
 navigation and the credibility facts now live directly in `Hero` (as a
 facts row, sourced from the same `introBadges` Sanity field `Intro` used
-to consume). `Header` itself is the single sticky nav now: transparent
-over the hero, solid on scroll, active-section highlighting via
+to consume). `Header` itself is the single nav now: transparent over the
+hero, solid on scroll, active-section highlighting via
 `IntersectionObserver`, and a mobile hamburger menu — all client-side
 (`useSyncExternalStore`, same convention as `CursorSpotlight`/`Countdown`).
+
+- **`Header` is `position: fixed`, not `sticky`.** `sticky` is in normal
+  flow — it pushes `Hero` down by the header's height, so the "transparent
+  over hero" look breaks: you get a solid dark band at the top instead of
+  the hero photo showing through. `fixed` removes it from flow so `Hero`
+  starts at the true top of the page and the header floats over it; the
+  `scrolled`-state background swap still works the same way. If `Header`
+  ever needs to reserve real layout space again, that's a deliberate
+  trade-off to re-discuss, not a silent revert to `sticky`.
+- `useActiveSection`'s `ids` array must be a **stable reference**
+  (`LINK_IDS`, hoisted to module scope) — passing `LINKS.map(l => l.id)`
+  inline recreates the array every render, which resets the
+  `useSyncExternalStore` subscription (and re-creates the
+  `IntersectionObserver`) on every render instead of once on mount.
+- `Hero`'s content layer is `absolute inset-0` (not a normal-flow child
+  with its own `min-h-screen` + large padding) so it's always exactly the
+  section's height and centers within it — nesting two independent
+  `min-h-screen`s (section + inner flex div) plus padding made the content
+  taller than the viewport, clipping the CTAs and scroll cue below the
+  fold on real screen heights. If you add content to the hero, check it
+  still fits at ~800px viewport height before shipping.
 
 **SocialProof is currently NOT rendered** (commented out of `page.tsx`) —
 see "Placeholder content" below.
@@ -156,6 +177,16 @@ static rendering matters here. Slugs must match the `<option value>`s in
   literal `[XX.000 kr.]` bracket) — matches the category norm (the
   competitor site doesn't list a number either). Swap in a real number in
   `Booking.tsx` if/when the user wants pricing shown publicly.
+- **`Booking.tsx` has no real backend (`TODO` comment marks this).**
+  Submitting builds a prefilled `mailto:` link and the success panel says
+  plainly that the form isn't connected to a mail server yet, with the
+  `mailto:` button and a plain-text email fallback. An earlier version of
+  this form faked a real send ("Tak for din forespørgsel — vi vender
+  tilbage hurtigst muligt.") with no way for the enquiry to actually
+  arrive — a real trust/business risk on a booking page, caught in review
+  before ever going live. When a real backend (Resend/Formspree/API route)
+  is wired up, replace the `mailto:` fallback with an honest success state
+  for *that* — don't reintroduce a fake "we got it" message.
 - The "Download foredragsbeskrivelse (PDF)" link in `Foredrag.tsx` was
   **removed** (was `href="#"`, a dead link, and no PDF asset exists). Add
   it back only once a real PDF exists — don't ship a dead/fake download

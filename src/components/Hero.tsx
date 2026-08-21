@@ -24,7 +24,7 @@ export function Hero({
   facts?: string[];
 }) {
   return (
-    <section id="hero" className="relative min-h-screen w-full overflow-hidden">
+    <section id="hero" className="relative min-h-[100svh] w-full overflow-hidden">
       <Image
         src="/hav-baggrund.jpg"
         alt=""
@@ -40,7 +40,7 @@ export function Hero({
         className="absolute inset-y-0 left-0 z-[1] w-8 opacity-15 sm:w-10"
         style={{ background: "var(--faroe-gradient)" }}
       />
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center gap-6 px-6 py-28 text-center text-white">
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 px-6 py-20 text-center text-white">
         <HeroPortrait alt={name} />
 
         <p className="text-xs uppercase tracking-[0.3em] text-white/70 sm:text-sm">
@@ -86,7 +86,7 @@ export function Hero({
         <a
           href="#foredrag"
           aria-label="Scroll ned"
-          className="scroll-cue absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 transition hover:text-white"
+          className="scroll-cue absolute bottom-5 left-1/2 -translate-x-1/2 text-white/60 transition hover:text-white"
         >
           <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
             <path
