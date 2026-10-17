@@ -53,10 +53,10 @@ export function About({
             <h2 className="mt-4 text-balance font-serif text-3xl italic text-foreground sm:text-4xl">
               {title}
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-muted sm:text-lg sm:leading-loose">
+            <p className="mt-6 max-w-[68ch] text-base leading-relaxed text-muted sm:text-lg sm:leading-loose">
               {body}
             </p>
-            <p className="mt-6 text-balance border-l border-accent pl-5 font-serif text-lg italic leading-relaxed text-foreground">
+            <p className="mt-6 max-w-[68ch] text-balance border-l border-accent pl-5 font-serif text-lg italic leading-relaxed text-foreground">
               &ldquo;{quote}&rdquo;
             </p>
           </ScrollReveal>

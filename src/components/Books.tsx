@@ -44,8 +44,10 @@ const BOOKS = [
   },
 ];
 
-// No cover art or buy link exists for these two yet — typographic cards
-// instead of an invented cover image or purchase link. See CLAUDE.md.
+// No cover art or buy link exists for these two yet. Not rendered — see
+// CLAUDE.md ("Books") — keep the data here so it's a one-line change to
+// show them again once art/links exist.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TYPOGRAPHIC_BOOKS = [
   {
     title: "Ultraminor World Literatures",
@@ -118,23 +120,6 @@ export function Books() {
                     Køb →
                   </a>
                 </div>
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
-
-        <div className="mt-12 grid gap-8 border-t border-border pt-12 sm:grid-cols-2">
-          {TYPOGRAPHIC_BOOKS.map((book, i) => (
-            <ScrollReveal key={book.title} delay={i * 0.1}>
-              <div className="flex h-full flex-col justify-center rounded-lg border border-white/[0.12] bg-surface-raised/40 p-8 text-center">
-                <h3 className="font-serif text-xl italic text-foreground">
-                  {book.title}
-                </h3>
-                <BookMeta
-                  role={book.role}
-                  attribution={book.attribution}
-                  publisher={book.publisher}
-                />
               </div>
             </ScrollReveal>
           ))}

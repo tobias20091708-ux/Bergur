@@ -28,6 +28,7 @@ export type Testimonial = {
   _id: string;
   quote: string;
   name?: string;
+  role?: string;
   org?: string;
 };
 

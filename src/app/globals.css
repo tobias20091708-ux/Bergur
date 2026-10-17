@@ -37,6 +37,10 @@
   --color-border: var(--border);
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
+  /* Bumped from Tailwind's default 1.625 — min. 1.7 line-height for body
+     copy on dark background (readability pass). Affects every
+     leading-relaxed use site-wide. */
+  --leading-relaxed: 1.75;
 }
 
 body {

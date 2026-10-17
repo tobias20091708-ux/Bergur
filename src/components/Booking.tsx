@@ -3,37 +3,30 @@
 import { FormEvent, useState, useSyncExternalStore } from "react";
 import { ScrollReveal } from "./ScrollReveal";
 import { getSnapshot, getServerSnapshot, subscribe } from "@/lib/topicStore";
+import { TOPIC_LABELS } from "@/lib/topics";
 
 const CONTACT_EMAIL = "kontakt@bergurmoberg.dk";
 
-const TOPIC_LABELS: Record<string, string> = {
-  "kolde-oer-blev-cool": "Kolde øer blev cool",
-  "to-kulturikoner": "To kulturikoner, to øer",
-  "verdens-mest-oversete-forfatter": "Verdens mest oversete forfatter",
-  "heinesen-hulen": "Heinesen-hulen",
-  andet: "Andet/ved ikke endnu",
-};
+type Status = "idle" | "submitting" | "sent" | "fallback";
 
 export function Booking() {
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
   const [mailtoHref, setMailtoHref] = useState<string | null>(null);
   const prefilledTopic = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [topicOverride, setTopicOverride] = useState<string | null>(null);
   const topic = topicOverride ?? prefilledTopic ?? "";
 
-  // TODO: wire up to a real backend (e.g. Resend, Formspree, or an API
-  // route). Until then, submitting opens a prefilled mailto: link instead
-  // of pretending to deliver the enquiry — see CLAUDE.md.
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const data = new FormData(form);
     const name = String(data.get("name") ?? "");
     const email = String(data.get("email") ?? "");
     const organisation = String(data.get("organisation") ?? "");
     const date = String(data.get("date") ?? "");
     const selectedTopic = String(data.get("topic") ?? "");
     const message = String(data.get("message") ?? "");
+    const honeypot = String(data.get("hp_x7") ?? ""); // bots only
 
     const subject = `Foredragsforespørgsel${organisation ? ` — ${organisation}` : ""}`;
     const lines = [`Navn: ${name}`, `E-mail: ${email}`];
@@ -43,18 +36,37 @@ export function Booking() {
       lines.push(`Foredrag: ${TOPIC_LABELS[selectedTopic] ?? selectedTopic}`);
     }
     lines.push("", message);
-    const body = lines.join("\n");
-
-    const href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
     setMailtoHref(href);
-    setSubmitting(true);
-    window.setTimeout(() => {
-      setSubmitting(false);
-      setSubmitted(true);
-      // Open the visitor's own mail client with the prefilled enquiry —
-      // the button below does the same, in case this gets blocked.
-      window.location.href = href;
-    }, 400);
+    setStatus("submitting");
+
+    try {
+      const res = await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          organisation,
+          date,
+          topic: selectedTopic,
+          message,
+          hp_x7: honeypot,
+        }),
+      });
+
+      if (res.ok) {
+        setStatus("sent");
+        return;
+      }
+    } catch {
+      // network error — fall through to mailto fallback below
+    }
+
+    // Backend unavailable or failed — fall back to the visitor's own mail
+    // client rather than pretending the enquiry arrived. See CLAUDE.md.
+    setStatus("fallback");
+    window.location.href = href;
   }
 
   return (
@@ -70,58 +82,75 @@ export function Booking() {
           <h2 className="mt-4 font-serif text-3xl italic text-foreground sm:text-4xl">
             Forespørg på dato og pris
           </h2>
-          <p className="mt-4 max-w-lg text-base leading-relaxed text-muted sm:text-lg">
+          <p className="mt-4 max-w-[68ch] text-base leading-[1.7] text-muted sm:text-lg">
             Bergur holder et begrænset antal foredrag uden for Københavns
             Universitet. Send en uforpligtende forespørgsel, og få hurtigt
             svar på pris og tilgængelighed.
           </p>
         </ScrollReveal>
 
-        <ScrollReveal delay={0.05} className="mt-8">
-          <div className="flex flex-wrap gap-4 text-xs text-muted sm:text-sm">
-            <a
-              href="#hero"
-              className="rounded-md border border-border bg-surface-raised px-4 py-2 transition hover:border-accent hover:text-foreground"
-            >
-              1. Se Bergur fortælle
-            </a>
-            <span className="rounded-md border border-border bg-surface-raised px-4 py-2">
-              2. Bed om pressekit i beskeden nedenfor
-            </span>
-            <span className="rounded-md border border-accent bg-accent-soft px-4 py-2 text-foreground">
-              3. Forespørg på dato og pris
-            </span>
+        <ScrollReveal delay={0.05} className="mt-10">
+          <p className="text-xs uppercase tracking-[0.25em] text-muted">
+            Se Bergur fortælle
+          </p>
+          <div className="mt-3 flex aspect-video items-center justify-center rounded-lg border border-white/15 bg-surface-raised/60">
+            <p className="text-sm text-muted">Video kommer snart</p>
           </div>
         </ScrollReveal>
 
+        <ScrollReveal delay={0.08} className="mt-6">
+          <button
+            type="button"
+            disabled
+            className="inline-flex cursor-not-allowed items-center gap-2 rounded-md border border-border bg-surface-raised px-4 py-2.5 text-xs text-muted disabled:opacity-70 sm:text-sm"
+          >
+            Download pressekit (billeder + CV) — Kommer snart
+          </button>
+        </ScrollReveal>
+
         <ScrollReveal delay={0.1} className="mt-10">
-          {submitted ? (
+          {status === "sent" || status === "fallback" ? (
             <div className="rounded-lg border border-border bg-surface-raised p-8 text-foreground">
-              <p className="font-medium">Tak for din forespørgsel.</p>
-              <p className="mt-3 text-sm text-muted">
-                Dit e-mailprogram åbner nu med en færdig besked til{" "}
-                <a href={`mailto:${CONTACT_EMAIL}`} className="text-accent-text hover:text-foreground">
-                  {CONTACT_EMAIL}
-                </a>
-                . Tryk på send i dit e-mailprogram for at aflevere
-                henvendelsen.
-              </p>
-              <a
-                href={mailtoHref ?? `mailto:${CONTACT_EMAIL}`}
-                className="btn-faroe mt-5 inline-block rounded-md px-7 py-3 text-sm font-medium text-white"
-              >
-                Åbn og send mail til Bergur →
-              </a>
-              <p className="mt-4 text-sm text-muted">
-                Åbnede e-mailprogrammet ikke, så skriv direkte til{" "}
-                <a href={`mailto:${CONTACT_EMAIL}`} className="text-accent-text hover:text-foreground">
-                  {CONTACT_EMAIL}
-                </a>
-                .
-              </p>
+              {status === "sent" ? (
+                <>
+                  <p className="font-medium">Tak for din forespørgsel.</p>
+                  <p className="mt-3 max-w-[68ch] text-sm leading-[1.7] text-muted">
+                    Vi har modtaget din henvendelse og vender tilbage
+                    hurtigst muligt med svar på dato, pris og
+                    tilgængelighed.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="font-medium">Dit e-mailprogram åbner nu.</p>
+                  <p className="mt-3 max-w-[68ch] text-sm leading-[1.7] text-muted">
+                    Det åbner med en færdig besked til{" "}
+                    <a href={`mailto:${CONTACT_EMAIL}`} className="text-accent-text hover:text-foreground">
+                      {CONTACT_EMAIL}
+                    </a>
+                    . Tryk på send i dit e-mailprogram for at aflevere
+                    henvendelsen.
+                  </p>
+                  <a
+                    href={mailtoHref ?? `mailto:${CONTACT_EMAIL}`}
+                    className="btn-faroe mt-5 inline-block rounded-md px-7 py-3 text-sm font-medium text-white"
+                  >
+                    Åbn og send mail til Bergur →
+                  </a>
+                </>
+              )}
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="grid gap-5">
+              <input
+                type="text"
+                name="hp_x7"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute h-px w-px overflow-hidden opacity-0"
+                style={{ clip: "rect(0 0 0 0)" }}
+              />
               <div className="grid gap-5 sm:grid-cols-2">
                 <label className="flex flex-col gap-2 text-sm text-muted">
                   Navn
@@ -169,6 +198,9 @@ export function Booking() {
                   <option value="" disabled>
                     Vælg et foredrag
                   </option>
+                  <option value="det-kulturelle-rigsfaellesskab">
+                    Det kulturelle rigsfællesskab
+                  </option>
                   <option value="kolde-oer-blev-cool">
                     Kolde øer blev cool
                   </option>
@@ -194,20 +226,19 @@ export function Booking() {
               <div className="mt-2 flex flex-wrap items-center gap-4">
                 <button
                   type="submit"
-                  disabled={submitting}
+                  disabled={status === "submitting"}
                   className="btn-faroe w-fit rounded-md px-8 py-3 text-sm font-medium text-white disabled:opacity-60"
                 >
-                  {submitting ? "Sender…" : "Send forespørgsel"}
+                  {status === "submitting" ? "Sender…" : "Send forespørgsel"}
                 </button>
                 <p className="text-xs text-muted">
                   Uforpligtende forespørgsel. I modtager svar hurtigst
                   muligt.
                 </p>
               </div>
-              <p className="text-xs leading-relaxed text-muted">
-                Når du sender, åbnes dit e-mailprogram med en færdig besked
-                til {CONTACT_EMAIL}. Vi behandler kun de oplysninger, du
-                selv opgiver, og videregiver dem ikke til tredjepart.
+              <p className="max-w-[68ch] text-xs leading-[1.7] text-muted">
+                Vi behandler kun de oplysninger, du selv opgiver, og
+                videregiver dem ikke til tredjepart.
               </p>
             </form>
           )}

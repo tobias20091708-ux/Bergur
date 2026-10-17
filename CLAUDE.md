@@ -42,6 +42,13 @@ animations, React Three Fiber + drei for the 3D book covers.
   border. Never as a large fill. Treat it as a hint, not a flag.
 - Buttons: `rounded-md` (flat-ish corners), never fully round. Sections use
   generous padding (`py-32`, ~128px) — the design should "breathe."
+- Body-copy readability (2026-10): Tailwind's `--leading-relaxed` token is
+  overridden to `1.75` in `globals.css`'s `@theme inline` block (was the
+  default 1.625) — this bumps every existing `leading-relaxed` use
+  site-wide to meet a ≥1.7 line-height minimum on dark background, so
+  don't also hand-roll `leading-[1.7]` where `leading-relaxed` already
+  applies. Long body paragraphs additionally get `max-w-[68ch]` to cap
+  line length for readability.
 - **No autoplay `<video>` backgrounds anywhere on the site.** Use static
   images with the `.ken-burns` CSS class (globals.css — slow infinite-
   alternate scale, no JS/decode dependency) for subtle motion instead. See
@@ -54,9 +61,37 @@ animations, React Three Fiber + drei for the 3D book covers.
 
 ## Section order (`src/app/page.tsx`)
 
-Header → Hero → EventBar → About → FaroeDivider → Foredrag (benefit boxes +
-3 full-viewport talk pages) → FaroeDivider → HeinesenProject → Books →
-Booking → Footer.
+Header → Hero → EventBar → About → SocialProof → FaroeDivider → Foredrag
+(benefit boxes + featured talk + 3 talk cards + topic list) →
+FaroeDivider → HeinesenProject → Books → Booking → Footer.
+
+**2026-10 CRO pass — three earlier decisions deliberately reversed** (the
+user supplied a detailed Danish conversion-optimization brief and asked
+for exactly these changes; recorded here so a later session doesn't
+"fix" them back):
+- **Foredrag is no longer 3 full-viewport cinematic talk pages.** It's now
+  a benefits strip + a featured card ("Det kulturelle rigsfællesskab",
+  accent border + "Nyt" badge) + the 3 existing talks as comparable
+  `sm:grid-cols-3` cards (thumbnail, 1–2 sentence teaser, native
+  `<details>` "Læs mere" for the full paragraphs, duration + audience
+  tags, "Forespørg" CTA) + an "Alle foredragsemner" tag list. The
+  "Competitive reference" section below previously said the user wanted
+  to *keep* the cinematic version — that preference is superseded by this
+  brief. If asked to go cinematic again, confirm with the user first;
+  don't silently pick one.
+- **Bracketed placeholder content is back, deliberately, in three
+  places**: `SocialProof` testimonials (quote text itself is bracketed,
+  not just name/org), the price line above the Foredrag cards ("Fra
+  `[X.000]` kr."), and `EventBar`'s November/December slots. The
+  "Placeholder content" section below previously said never to ship
+  bracketed text live again — the user's brief explicitly asked for
+  `[brackets]` as the marker for missing data this time, so follow that
+  instead. Swap in real values as they're collected; don't remove the
+  bracket convention without asking.
+- **`SocialProof` is rendered again**, directly after `About`, fed by
+  `getTestimonials()` with the bracketed defaults as fallback when Sanity
+  has nothing. Star rating (★★★★★) was dropped — it implied real reviews
+  next to text that says `[Indsæt citat...]`.
 
 `Intro.tsx` and `SubNav.tsx` were removed — they duplicated `Header`'s
 navigation and the credibility facts now live directly in `Hero` (as a
@@ -101,9 +136,16 @@ via `useSyncExternalStore` and uses it as the controlled `<select>` value
 `?topic=slug#book` (full page reload for a same-page link) or
 `useSearchParams` (forces a Suspense boundary / de-opts the page from
 static rendering) — see CLAUDE.md history / the SEO section below for why
-static rendering matters here. Slugs must match the `<option value>`s in
-`Booking.tsx` exactly: `kolde-oer-blev-cool`, `to-kulturikoner`,
-`verdens-mest-oversete-forfatter`, `heinesen-hulen`.
+static rendering matters here.
+
+Topic slugs and their Danish labels live in one place,
+`src/lib/topics.ts` (`TOPIC_LABELS`) — imported by `Booking.tsx` (dropdown
++ mailto/API subject line) and `src/app/api/booking/route.ts` (email body).
+`Foredrag.tsx`'s `TalkCTA` slugs and `HeinesenProject.tsx`'s are plain
+string literals that must match these keys exactly; a slug added to one
+place must be added to all three. Current slugs:
+`det-kulturelle-rigsfaellesskab`, `kolde-oer-blev-cool`,
+`to-kulturikoner`, `verdens-mest-oversete-forfatter`, `heinesen-hulen`.
 
 ## Known gotchas (learned the hard way — see commit history)
 
@@ -127,6 +169,11 @@ static rendering matters here. Slugs must match the `<option value>`s in
   apply after mount. `Header`'s scroll/active-section hooks and
   `topicStore` both follow this pattern — copy them rather than reaching
   for `useEffect` + `useState` for anything else "browser-only."
+  (`Countdown.tsx`, an earlier example of this pattern, was deleted in the
+  2026-10 CRO pass — it counted down to a hardcoded date that had already
+  passed, which silently rendered as an empty `()` in `EventBar`. If you
+  need a countdown again, compute the target date dynamically or source it
+  from Sanity, not a hardcoded literal.)
 - **Autoplay `<video>` backgrounds are unreliable in this deployment and
   must not be reintroduced.** Two separate dynamic hero-background attempts
   failed silently: first a WebGL ocean shader, then a real `<video>`. Once
@@ -166,31 +213,34 @@ static rendering matters here. Slugs must match the `<option value>`s in
 
 ## Placeholder content still needing real material
 
-- **Testimonials**: `SocialProof.tsx` still exists but is intentionally not
-  rendered in `page.tsx` (was showing raw `"[Indsæt citat fra arrangør
-  her]"` bracket placeholders live to real visitors — a live buyer-journey
-  audit flagged this as the single most trust-damaging thing on the site).
-  Re-enable by importing and rendering `<SocialProof testimonials={...} />`
-  again once real quotes with names/orgs are available. Don't ship
-  bracketed placeholder text live again for any section.
-- Booking price now reads "Kontakt for pris og tilgængelighed" (was a
-  literal `[XX.000 kr.]` bracket) — matches the category norm (the
-  competitor site doesn't list a number either). Swap in a real number in
-  `Booking.tsx` if/when the user wants pricing shown publicly.
-- **`Booking.tsx` has no real backend (`TODO` comment marks this).**
-  Submitting builds a prefilled `mailto:kontakt@bergurmoberg.dk` link
-  (subject + body from the form fields, topic mapped through
-  `TOPIC_LABELS` for a readable label) and both auto-redirects to it
-  (`window.location.href`, opens the visitor's own mail client) and shows
-  it as a button in the success panel, with a plain-text email fallback
-  for when the auto-open doesn't fire. There's still no server-side
-  backend/API route — an earlier draft of this form faked a real send
-  ("Tak for din forespørgsel — vi vender tilbage hurtigst muligt.") with
-  no way for the enquiry to actually arrive, a real trust/business risk on
-  a booking page, caught in review before ever going live. When a real
-  backend (Resend/Formspree/API route) is wired up, replace the `mailto:`
-  flow with an honest success state for *that* — don't reintroduce a fake
-  "we got it" message.
+- **Testimonials**: `SocialProof.tsx` is rendered again (directly after
+  `About`), deliberately showing bracketed placeholder quotes — see the
+  "2026-10 CRO pass" note under Section order above for why this reverses
+  an earlier decision. Content lives in `DEFAULT_TESTIMONIALS` in
+  `SocialProof.tsx`, used as a fallback when `getTestimonials()` returns
+  nothing from Sanity. Swap in real quotes/names/orgs (the `testimonial`
+  schema now has a `role` field too) as they're collected, keeping the
+  `[bracket]` convention for whatever's still missing.
+- **Foredrag price line** ("Fra `[X.000]` kr. ekskl. moms og transport",
+  above the talk cards in `Foredrag.tsx`) and **EventBar's
+  November/December slots** are bracketed placeholders — same CRO-brief
+  convention. Swap in real figures/bookings as they're confirmed.
+- **`Booking.tsx` now has a real backend**: `src/app/api/booking/route.ts`
+  sends the enquiry via the Resend REST API (plain `fetch`, no SDK
+  dependency) to `kontakt@bergurmoberg.dk` with `reply_to` set to the
+  visitor's email, and includes a hidden honeypot field
+  (`website`) to filter bots. **This requires a `RESEND_API_KEY`
+  environment variable in Vercel, which is not set yet** — until it is,
+  the route returns 503 and the client falls back to the old
+  `mailto:` flow (opens the visitor's mail client, shows which happened
+  honestly rather than claiming success either way). To finish wiring
+  this up: create a Resend account, verify the sending domain
+  (`bergurmoberg.dk` — confirm it's actually live first, see Footer note
+  below), add `RESEND_API_KEY` (and optionally `RESEND_FROM_EMAIL`, which
+  defaults to `booking@bergurmoberg.dk`) to the `bergur` Vercel project's
+  environment variables, then redeploy. Don't reintroduce a fake "we got
+  it" success message for either path — the success panel only shows
+  after a real 2xx from `/api/booking`.
 - The "Download foredragsbeskrivelse (PDF)" link in `Foredrag.tsx` was
   **removed** (was `href="#"`, a dead link, and no PDF asset exists) — each
   talk has a single `TalkCTA` ("Forespørg på dette foredrag") instead of a
@@ -199,19 +249,40 @@ static rendering matters here. Slugs must match the `<option value>`s in
 - **Heinesen-hulen rendering**: `HeinesenProject.tsx` has an explicit
   `TODO` comment marking where the real architectural rendering from
   Henning Larsen Arkitekter goes once available. Until then it shows an
-  editorial placeholder (icon + label) over an atmospheric photo of the
-  actual Faroese sea cliffs (`/foredrag/verdens-mest-oversete.jpg`) — that
-  photo is real scenery, not a stand-in for the rendering; don't let it be
-  mistaken for one in copy.
-- **Books**: "Ultraminor World Literatures" and "Resten i Vesten" are
-  shown as typographic cards (title + role only, no cover image, no buy
-  link) because no cover art or purchase link exists for them yet — see
-  `TYPOGRAPHIC_BOOKS` in `Books.tsx`. Swap in a real cover + `buyUrl` and
-  move them into `BOOKS` (the 3D-cover list) once available; don't invent
-  a publisher or link in the meantime.
-- Footer email is displayed as-is (also a clickable `mailto:` link);
-  confirm the domain is actually live before treating it as a working
-  contact address.
+  editorial placeholder (icon + "Visualisering kommer snart") over an
+  atmospheric photo of Risin og Kellingin, the actual Faroese sea stacks
+  off Eysturoy (`/foredrag/verdens-mest-oversete.jpg`) — that photo is
+  real scenery, not a stand-in for the rendering; don't let it be mistaken
+  for one in copy.
+- **Pressekit**: `Booking.tsx` shows a disabled "Download pressekit
+  (billeder + CV) — Kommer snart" button (not a dead `href="#"` link —
+  that pattern was removed once already, see the Foredragsbeskrivelse
+  note below). Wire it to a real PDF once one exists.
+- **"Se Bergur fortælle" video**: `Booking.tsx` shows a static
+  "Video kommer snart" placeholder box above the form — no `<video>`
+  element, no autoplay (see "No autoplay `<video>` backgrounds" in the
+  design system section above for why). Replace with a real YouTube/Vimeo
+  embed once footage exists.
+- **Books**: "Ultraminor World Literatures" and "Resten i Vesten" have no
+  cover art or purchase link, so they're not rendered — `TYPOGRAPHIC_BOOKS`
+  in `Books.tsx` still holds their data (title + role, no image/buyUrl)
+  but the section that rendered them as typographic cards was removed in
+  the 2026-10 CRO pass ("hide empty book slots" was explicit in the
+  brief). Swap in a real cover + `buyUrl`, move them into `BOOKS` (the
+  3D-cover list), and re-add the render block once available; don't
+  invent a publisher or link in the meantime.
+  **Also unresolved**: `About.tsx`'s `DEFAULT_FACTS` credits David
+  Damrosch as co-author of *Ultraminor World Literatures* (2022);
+  `TYPOGRAPHIC_BOOKS` (before it was hidden) credited him on *Resten i
+  Vesten* instead. One of these is wrong — confirm with the user which
+  book he actually co-authored before either is shown/changed again.
+- Footer email is displayed as-is (also a clickable `mailto:` link).
+  **Confirmed 2026-10: `bergurmoberg.dk` has no MX, A, or NS records at
+  all** (`dig MX/A/NS bergurmoberg.dk` all return empty) — the domain
+  currently cannot receive mail by any path, `mailto:` or the
+  `/api/booking` Resend route alike. This has to be fixed (register/point
+  DNS, or use a different contact address) before the booking form can
+  actually deliver enquiries anywhere.
 
 ## SEO
 
@@ -279,9 +350,18 @@ naujalynge.dk (Nauja Lynge — Greenland/Arctic speaker, same "Nordic
 identity public speaker" niche) is the explicit design reference for this
 site and is worth re-checking when making structural decisions. Patterns
 borrowed from it: a sticky nav bar, static hero photography over
-video/WebGL, scroll-spy active-link highlighting. Patterns considered and
-explicitly rejected by the user: switching the full-viewport cinematic
-Foredrag section to a compact scannable grid (naujalynge's approach) — user
-wants to keep the cinematic version.
+video/WebGL, scroll-spy active-link highlighting, and — as of the 2026-10
+CRO pass — the compact, side-by-side-comparable Foredrag card layout.
+
+**Superseded:** an earlier session recorded that the user had explicitly
+rejected switching the full-viewport cinematic Foredrag section to a
+compact scannable grid, wanting to keep the cinematic version. A detailed
+2026-10 conversion-optimization brief reversed that explicitly and asked
+for exactly the compact-card layout naujalynge uses (comparable cards:
+title, 1–2 sentence teaser, duration, audience tag, "Forespørg" CTA) —
+see `Foredrag.tsx` and the Section order note above. If a future session
+is tempted to "restore" the cinematic version citing this file's history,
+confirm with the user first — this is the second reversal on this exact
+question.
 
 @AGENTS.md

@@ -8,10 +8,14 @@ import { Foredrag } from "@/components/Foredrag";
 import { Header } from "@/components/Header";
 import { HeinesenProject } from "@/components/HeinesenProject";
 import { Hero } from "@/components/Hero";
-import { getSiteContent } from "@/sanity/queries";
+import { SocialProof } from "@/components/SocialProof";
+import { getSiteContent, getTestimonials } from "@/sanity/queries";
 
 export default async function Home() {
-  const content = await getSiteContent();
+  const [content, testimonials] = await Promise.all([
+    getSiteContent(),
+    getTestimonials(),
+  ]);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -28,6 +32,9 @@ export default async function Home() {
         body={content?.aboutBody}
         facts={content?.aboutFacts}
       />
+      <SocialProof
+        testimonials={testimonials.length ? testimonials : undefined}
+      />
       <FaroeDivider />
       <Foredrag />
       <FaroeDivider />
@@ -38,7 +45,6 @@ export default async function Home() {
         image={content?.heinesenImage}
       />
       <Books />
-      {/* SocialProof intentionally hidden until real testimonials are supplied — see CLAUDE.md */}
       <Booking />
       <Footer email={content?.footerEmail} />
     </div>

@@ -36,8 +36,7 @@ export function HeinesenProject({
       <div className="absolute inset-0">
         <Image
           src="/foredrag/verdens-mest-oversete.jpg"
-          alt=""
-          aria-hidden="true"
+          alt="Risin og Kellingin — de færøske klippestakke ud for Eysturoy i tåge"
           fill
           sizes="100vw"
           className="ken-burns object-cover opacity-40"
@@ -79,9 +78,7 @@ export function HeinesenProject({
                     </svg>
                   </span>
                   <p className="text-xs uppercase tracking-[0.25em] text-muted">
-                    Visualisering fra Henning Larsen Arkitekter
-                    <br />
-                    indsættes her, når den er klar
+                    Visualisering kommer snart
                   </p>
                 </div>
               )}
@@ -95,7 +92,7 @@ export function HeinesenProject({
             <h2 className="mt-4 text-balance font-serif text-3xl italic text-foreground sm:text-4xl">
               {title}
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-muted sm:text-lg sm:leading-loose">
+            <p className="mt-6 max-w-[68ch] text-base leading-relaxed text-muted sm:text-lg sm:leading-loose">
               {body}
             </p>
 

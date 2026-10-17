@@ -18,6 +18,11 @@ export const testimonial = defineType({
       type: "string",
     }),
     defineField({
+      name: "role",
+      title: "Titel",
+      type: "string",
+    }),
+    defineField({
       name: "org",
       title: "Organisation",
       type: "string",

@@ -5,7 +5,7 @@ const DEFAULT_NAME = "Bergur Rønne Moberg";
 const DEFAULT_TAGLINE = "De vilde steder\nog den store poesi";
 const EYEBROW = "Lektor · Københavns Universitet · Foredragsholder";
 const SHORT_COPY =
-  "Foredrag om Færøerne, nordisk litteratur og de fortællinger, der vokser frem, når verden bliver set fra kanten.";
+  "Foredrag om Færøerne og nordisk litteratur — booket af biblioteker, kulturhuse og aftenskoler i hele Norden.";
 
 const DEFAULT_FACTS = [
   "Lektor, Københavns Universitet",
@@ -27,8 +27,7 @@ export function Hero({
     <section id="hero" className="relative min-h-[100svh] w-full overflow-hidden">
       <Image
         src="/hav-baggrund.jpg"
-        alt=""
-        aria-hidden="true"
+        alt="Et sejlskib med fyldte sejl på åbent hav i tusmørke"
         fill
         priority
         sizes="100vw"
@@ -70,16 +69,16 @@ export function Hero({
 
         <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
           <a
-            href="#foredrag"
+            href="#book"
             className="rounded-md bg-white px-7 py-3 text-sm font-medium text-black transition hover:bg-white/90"
           >
-            Se foredrag
+            Book foredrag
           </a>
           <a
-            href="#book"
+            href="#foredrag"
             className="rounded-md border border-white/50 px-7 py-3 text-sm font-medium text-white transition hover:border-white hover:bg-white/10"
           >
-            Book foredrag
+            Se foredrag
           </a>
         </div>
 
