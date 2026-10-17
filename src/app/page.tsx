@@ -21,7 +21,6 @@ export default async function Home() {
     <div className="flex flex-1 flex-col">
       <Header />
       <Hero
-        name={content?.heroTitle}
         tagline={content?.heroTagline}
         facts={content?.introBadges}
       />

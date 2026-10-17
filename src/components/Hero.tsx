@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { HeroPortrait } from "./HeroPortrait";
 
-const DEFAULT_NAME = "Bergur Rønne Moberg";
 const DEFAULT_TAGLINE = "De vilde steder\nog den store poesi";
 const EYEBROW = "Lektor · Københavns Universitet · Foredragsholder";
-const SHORT_COPY =
-  "Foredrag om Færøerne og nordisk litteratur — booket af biblioteker, kulturhuse og aftenskoler i hele Norden.";
+const SUBHEAD =
+  "Han holder foredrag om Færøerne og nordisk litteratur — og har skrevet flere bøger om emnet.";
+const BODY_COPY =
+  "Booket af biblioteker, kulturhuse, aftenskoler og virksomheder i hele Norden — fra foredrag om Heinesen-hulen til udgivne værker om færøsk litteraturhistorie.";
 
 const DEFAULT_FACTS = [
   "Lektor, Københavns Universitet",
@@ -15,11 +15,9 @@ const DEFAULT_FACTS = [
 ];
 
 export function Hero({
-  name = DEFAULT_NAME,
   tagline = DEFAULT_TAGLINE,
   facts = DEFAULT_FACTS,
 }: {
-  name?: string;
   tagline?: string;
   facts?: string[];
 }) {
@@ -33,72 +31,77 @@ export function Hero({
         sizes="100vw"
         className="ken-burns object-cover"
       />
-      <div className="absolute inset-0 bg-[rgba(6,13,22,0.6)]" />
+      <div className="absolute inset-0 bg-[rgba(6,13,22,0.62)]" />
       <div
         aria-hidden="true"
         className="absolute inset-y-0 left-0 z-[1] w-8 opacity-15 sm:w-10"
         style={{ background: "var(--faroe-gradient)" }}
       />
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 px-6 py-20 text-center text-white">
-        <HeroPortrait alt={name} />
 
-        <p className="text-xs uppercase tracking-[0.3em] text-white/70 sm:text-sm">
-          {EYEBROW}
-        </p>
+      <div className="absolute inset-0 z-10 flex items-center px-6 py-24 text-white sm:px-12">
+        <div className="mx-auto w-full max-w-6xl">
+          <div className="flex max-w-xl flex-col items-start gap-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/70 sm:text-sm">
+              {EYEBROW}
+            </p>
 
-        <h1 className="max-w-2xl whitespace-pre-line font-serif text-4xl italic leading-[1.15] sm:text-6xl">
-          {tagline}
-        </h1>
+            <h1 className="whitespace-pre-line font-serif text-4xl italic leading-[1.12] sm:text-6xl">
+              {tagline}
+            </h1>
 
-        <p className="max-w-xl text-balance text-base text-white/85 sm:text-lg">
-          {SHORT_COPY}
-        </p>
+            <p className="text-balance text-lg font-bold leading-snug sm:text-xl">
+              {SUBHEAD}
+            </p>
 
-        <ul className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-white/70 sm:text-sm">
-          {facts.map((fact, i) => (
-            <li key={fact} className="flex items-center gap-3">
-              {i > 0 && (
-                <span aria-hidden="true" className="text-white/30">
-                  ·
-                </span>
-              )}
-              {fact}
-            </li>
-          ))}
-        </ul>
+            <p className="max-w-lg text-balance text-sm leading-[1.7] text-white/80 sm:text-base">
+              {BODY_COPY}
+            </p>
 
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
-          <a
-            href="#book"
-            className="rounded-md bg-white px-7 py-3 text-sm font-medium text-black transition hover:bg-white/90"
-          >
-            Book foredrag
-          </a>
-          <a
-            href="#foredrag"
-            className="rounded-md border border-white/50 px-7 py-3 text-sm font-medium text-white transition hover:border-white hover:bg-white/10"
-          >
-            Se foredrag
-          </a>
+            <ul className="mt-1 flex flex-wrap items-center gap-2.5 text-xs text-white/85 sm:text-sm">
+              {facts.map((fact) => (
+                <li
+                  key={fact}
+                  className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5"
+                >
+                  {fact}
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-2 flex flex-wrap items-center gap-4">
+              <a
+                href="#book"
+                className="rounded-md bg-white px-7 py-3 text-sm font-medium text-black transition hover:bg-white/90"
+              >
+                Book foredrag
+              </a>
+              <a
+                href="#foredrag"
+                className="rounded-md border border-white/50 px-7 py-3 text-sm font-medium text-white transition hover:border-white hover:bg-white/10"
+              >
+                Se foredrag
+              </a>
+            </div>
+          </div>
         </div>
-
-        <a
-          href="#foredrag"
-          aria-label="Scroll ned"
-          className="scroll-cue absolute bottom-5 left-1/2 -translate-x-1/2 text-white/60 transition hover:text-white"
-        >
-          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-            <path
-              d="M12 4v14m0 0l-6-6m6 6l6-6"
-              stroke="currentColor"
-              strokeWidth="1.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-            />
-          </svg>
-        </a>
       </div>
+
+      <a
+        href="#foredrag"
+        aria-label="Scroll ned"
+        className="scroll-cue absolute bottom-5 left-1/2 z-10 -translate-x-1/2 text-white/60 transition hover:text-white"
+      >
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path
+            d="M12 4v14m0 0l-6-6m6 6l6-6"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+          />
+        </svg>
+      </a>
     </section>
   );
 }

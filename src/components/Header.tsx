@@ -4,10 +4,7 @@ import { useCallback, useState, useSyncExternalStore } from "react";
 
 const LINKS = [
   { href: "#om-bergur", label: "Om Bergur", id: "om-bergur" },
-  { href: "#foredrag", label: "Foredrag", id: "foredrag" },
-  { href: "#heinesen-hulen", label: "Heinesen-hulen", id: "heinesen-hulen" },
   { href: "#boeger", label: "Bøger", id: "boeger" },
-  { href: "#book", label: "Kontakt", id: "book" },
 ];
 
 const LINK_IDS = LINKS.map((l) => l.id);
@@ -72,14 +69,14 @@ export function Header() {
           Bergur Rønne Moberg
         </a>
 
-        <nav className="hidden items-center gap-7 text-sm text-muted sm:flex">
+        <nav className="hidden items-center gap-8 sm:flex">
           {LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
               aria-current={active === link.id ? "true" : undefined}
-              className={`transition hover:text-accent-text ${
-                active === link.id ? "text-foreground" : ""
+              className={`text-[17px] font-bold transition hover:text-accent-text ${
+                active === link.id ? "text-foreground" : "text-muted"
               }`}
             >
               {link.label}
@@ -87,9 +84,9 @@ export function Header() {
           ))}
           <a
             href="#book"
-            className="rounded-md bg-accent px-5 py-2 text-sm font-medium text-foreground transition hover:bg-accent/90"
+            className="rounded-md bg-accent px-6 py-2.5 text-sm font-bold text-foreground transition hover:bg-accent/90"
           >
-            Book foredrag
+            Kontakt
           </a>
         </nav>
 
@@ -131,7 +128,7 @@ export function Header() {
                 <a
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className={`block rounded-md px-3 py-3 text-sm transition hover:bg-surface-raised hover:text-foreground ${
+                  className={`block rounded-md px-3 py-3 text-base font-bold transition hover:bg-surface-raised hover:text-foreground ${
                     active === link.id ? "text-foreground" : "text-muted"
                   }`}
                 >
@@ -143,9 +140,9 @@ export function Header() {
           <a
             href="#book"
             onClick={() => setMenuOpen(false)}
-            className="mt-3 block rounded-md bg-accent px-5 py-3 text-center text-sm font-medium text-foreground transition hover:bg-accent/90"
+            className="mt-3 block rounded-md bg-accent px-5 py-3 text-center text-sm font-bold text-foreground transition hover:bg-accent/90"
           >
-            Book foredrag
+            Kontakt
           </a>
         </nav>
       )}

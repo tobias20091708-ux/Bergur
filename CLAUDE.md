@@ -99,7 +99,29 @@ facts row, sourced from the same `introBadges` Sanity field `Intro` used
 to consume). `Header` itself is the single nav now: transparent over the
 hero, solid on scroll, active-section highlighting via
 `IntersectionObserver`, and a mobile hamburger menu — all client-side
-(`useSyncExternalStore`, same convention as `CursorSpotlight`/`Countdown`).
+(`useSyncExternalStore`, same convention as `CursorSpotlight`/`topicStore`).
+
+**2026-10 header/hero layout pass** (user asked to see it visualized as an
+Artifact mockup first, then said "fortsæt" to build it in): `Header`'s nav
+is deliberately down to 3 items — `LINKS` now holds only `Om Bergur` and
+`Bøger` (bold, `text-[17px]`), plus a separate filled `Kontakt` button
+(`href="#book"`, not part of `LINKS`/`LINK_IDS`). `Foredrag` and
+`Heinesen-hulen` were dropped from the nav bar itself — both sections
+still exist and are still reachable (scrolling, `Hero`'s "Se foredrag"
+CTA, `TalkCTA`s) — only the top-nav entries were removed. If asked to put
+them back in the header, that's additive and fine; don't reinterpret it
+as a sign the sections themselves should return to nav-less obscurity or
+vice versa without asking which is meant.
+`Hero` is left-aligned now (was centered): eyebrow → `h1` tagline (same
+serif italic as before) → a bold sans subheading stating what he does
+(talks + books) → a smaller/lighter supporting paragraph → the facts row
+as pill badges (`rounded-full border bg-white/10`, was a plain
+dot-separated list) → the two CTAs, all inside a `max-w-xl` block sitting
+left within the same `max-w-6xl` container the rest of the page uses, so
+it lines up with `Header`'s and other sections' left edge. `HeroPortrait`
+is **not rendered in `Hero` any more** — removed "for now" per the user,
+not deleted (`HeroPortrait.tsx` still exists, orphaned, for when the
+portrait comes back; don't delete the file on sight of it being unused).
 
 - **`Header` is `position: fixed`, not `sticky`.** `sticky` is in normal
   flow — it pushes `Hero` down by the header's height, so the "transparent
@@ -116,14 +138,16 @@ hero, solid on scroll, active-section highlighting via
   `IntersectionObserver`) on every render instead of once on mount.
 - `Hero`'s content layer is `absolute inset-0` (not a normal-flow child
   with its own `min-h-screen` + large padding) so it's always exactly the
-  section's height and centers within it — nesting two independent
-  `min-h-screen`s (section + inner flex div) plus padding made the content
-  taller than the viewport, clipping the CTAs and scroll cue below the
-  fold on real screen heights. If you add content to the hero, check it
-  still fits at ~800px viewport height before shipping.
-
-**SocialProof is currently NOT rendered** (commented out of `page.tsx`) —
-see "Placeholder content" below.
+  section's height — nesting two independent `min-h-screen`s (section +
+  inner flex div) plus padding made the content taller than the viewport,
+  clipping the CTAs and scroll cue below the fold on real screen heights.
+  As of the 2026-10 layout pass the content block is left-aligned, not
+  centered (`flex items-center` for vertical centering only, content sits
+  in a `max-w-xl` block inside a `mx-auto max-w-6xl` wrapper rather than a
+  centered `items-center` column) — the scroll cue `<a>` stays a separate
+  absolutely-positioned sibling so it's still centered at the bottom
+  regardless of the content's alignment. If you add content to the hero,
+  check it still fits at ~800px viewport height before shipping.
 
 ### Talk → booking topic prefill
 
@@ -326,9 +350,12 @@ place must be added to all three. Current slugs:
   images were up to 1.8MB unoptimized JPEGs; `next/image` cuts real
   transferred bytes by ~89% via responsive `srcset` + automatic
   AVIF/WebP — verified directly (996KB → 105KB, 1.5MB → 168KB at typical
-  render widths). `HeroPortrait.tsx` combines this with Framer Motion by
+  render widths). `HeroPortrait.tsx` combined this with Framer Motion by
   animating a wrapping `motion.div` rather than trying to animate the
-  `Image` component directly (mount delay is `0`, was `0.1s`, to help LCP).
+  `Image` component directly (mount delay `0`, to help LCP) — it's not
+  currently rendered (see the 2026-10 header/hero layout pass under
+  Section order above) but the technique is worth reusing if/when a
+  portrait image returns anywhere on the page.
   When adding new images, always use `next/image` (`fill` + a
   `relative`+sized parent for cover-style backgrounds) from the start.
 - `globals.css` has a global `prefers-reduced-motion: reduce` rule
@@ -340,9 +367,9 @@ place must be added to all three. Current slugs:
   real interactivity (scroll state, topic store, form state), but `Hero`,
   `About`, `Foredrag`, `HeinesenProject`, and `Books` stay server
   components so their copy ships in the initial HTML — only client *leaves*
-  (`TalkCTA`, `HeroPortrait`) are extracted where interactivity is
-  actually needed. Don't convert a whole content section to `"use client"`
-  just to add one interactive CTA inside it.
+  (`TalkCTA`; `HeroPortrait` when it's in use) are extracted where
+  interactivity is actually needed. Don't convert a whole content section
+  to `"use client"` just to add one interactive CTA inside it.
 
 ## Competitive reference
 
