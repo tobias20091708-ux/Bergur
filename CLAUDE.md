@@ -8,9 +8,14 @@ re-deriving it from the diff history.
 
 Marketing/booking site for Bergur Rønne Moberg — a Faroese literature scholar
 (lektor, Københavns Universitet) and public speaker. One-page Next.js site,
-deployed on Vercel (project `bergur`, team `tobias-projects8`), auto-deploys
+deployed on Vercel (project **`nordiskforedrag.dk`**, id
+`prj_a4tTAaiCMagRhxwE9rLb3lITIVp2`, team `tobias-projects8`), auto-deploys
 from `main` via the GitHub integration — every push goes live within ~30s,
-no manual deploy step.
+no manual deploy step. Earlier revisions of this file called the project
+`bergur`; that is wrong — there is no `bergur` project on the team
+(verified 2026-11 against the Vercel API). The project serves three
+verified domains: `nordiskforedrag.dk`, `www.nordiskforedrag.dk` and the
+legacy `bergur.vercel.app`.
 
 Stack: Next.js 16 (App Router, Turbopack), Tailwind CSS v4, Sanity CMS
 (`next-sanity`, optional — every section falls back to a hardcoded default
@@ -382,12 +387,24 @@ adding any of it back, add the real thing — don't restore the stub.
   copy or photos change; don't hand-edit the JPEG. Referenced as an
   absolute-resolving path (`/og/bergur-roenne-moberg.jpg`) via
   `metadataBase` in both `openGraph.images` and `twitter.images`.
-- The canonical tag also covers a real duplicate-content issue: three
-  Vercel domains (`bergur.vercel.app`,
-  `bergur-tobias-projects8.vercel.app`,
-  `bergur-git-main-tobias-projects8.vercel.app`) all serve identical
-  content — canonical always points at the primary domain regardless of
-  which alias served the request.
+- The canonical tag also covers a real duplicate-content issue: several
+  Vercel hostnames serve identical content, so canonical always points at
+  one chosen domain regardless of which alias served the request.
+- **⚠️ Open: `SITE_URL` points at the wrong domain.**
+  `src/app/layout.tsx` sets `SITE_URL = "https://bergur.vercel.app"`, and
+  `sitemap.ts` / `robots.ts` hardcode the same host. But the Vercel
+  project has had verified custom domains `nordiskforedrag.dk` and
+  `www.nordiskforedrag.dk` since 2026-10. So canonical, the sitemap, the
+  robots.txt sitemap line, the OG/Twitter image URLs and the JSON-LD
+  `url`/`@id`/`image` all currently declare the vercel.app host as the
+  real one. Fix is one line — change `SITE_URL` and the two hardcoded
+  strings — but **ask the user first which host is primary** (apex
+  `nordiskforedrag.dk` or `www.`), and set up a redirect from the other,
+  because guessing wrong just moves the duplicate-content problem.
+  Related: the contact address everywhere is `kontakt@bergurmoberg.dk`,
+  a domain with no DNS at all (see the Footer note under "Placeholder
+  content") — `nordiskforedrag.dk` is the domain that actually exists, so
+  the real contact address may well belong there.
 - **All images use `next/image`**, not raw `<img>` — this was the actual
   Core Web Vitals fix, not 3D loading (the 3D book covers were already
   lazy/deferred/below-fold and not a plausible LCP cause). The site's
