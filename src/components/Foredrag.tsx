@@ -231,8 +231,7 @@ export function Foredrag() {
 
         <ScrollReveal delay={0.1} className="mt-16">
           <p className="text-sm text-muted">
-            Fra <span className="text-foreground">[X.000] kr.</span> ekskl.
-            moms og transport — pris afhænger af format og lokation.
+            Pris afhænger af format og lokation.
           </p>
 
           {featured && (

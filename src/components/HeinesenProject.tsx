@@ -45,47 +45,35 @@ export function HeinesenProject({
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6 py-32 sm:px-12">
-        <div className="grid gap-14 sm:grid-cols-2 sm:items-center">
-          <ScrollReveal>
-            {/*
-              TODO: replace with the real rendering from Henning Larsen
-              Arkitekter once it's available. Do not ship a fake or
-              stock-photo "rendering" in its place.
-            */}
-            <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-lg border border-white/15 bg-background/60 backdrop-blur-sm">
-              {image ? (
+        <div
+          className={
+            image
+              ? "grid gap-14 sm:grid-cols-2 sm:items-center"
+              : "max-w-3xl"
+          }
+        >
+          {/*
+            The real rendering from Henning Larsen Arkitekter goes in the
+            `heinesenImage` Sanity field once it's available — the section
+            then lays itself out in two columns. Until then it stays a
+            single text column: no empty frame, no placeholder, and never a
+            fake or stock-photo "rendering" in its place.
+          */}
+          {image && (
+            <ScrollReveal>
+              <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-white/15 bg-background/60 backdrop-blur-sm">
                 <Image
                   src={urlFor(image).width(1000).height(750).url()}
                   alt={title}
                   fill
+                  sizes="(min-width: 640px) 45vw, 100vw"
                   className="object-cover"
                 />
-              ) : (
-                <div className="flex flex-col items-center gap-4 px-8 text-center">
-                  <span
-                    aria-hidden="true"
-                    className="flex h-14 w-14 items-center justify-center rounded-full border border-white/25"
-                  >
-                    <svg viewBox="0 0 24 24" width="22" height="22">
-                      <path
-                        d="M4 20c3-9 6-13 8-13s5 4 8 13"
-                        stroke="currentColor"
-                        strokeWidth="1.3"
-                        fill="none"
-                        strokeLinecap="round"
-                      />
-                      <circle cx="12" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.3" fill="none" />
-                    </svg>
-                  </span>
-                  <p className="text-xs uppercase tracking-[0.25em] text-muted">
-                    Visualisering kommer snart
-                  </p>
-                </div>
-              )}
-            </div>
-          </ScrollReveal>
+              </div>
+            </ScrollReveal>
+          )}
 
-          <ScrollReveal delay={0.1}>
+          <ScrollReveal delay={image ? 0.1 : 0}>
             <p className="text-sm uppercase tracking-[0.3em] text-accent-text">
               {eyebrow}
             </p>
