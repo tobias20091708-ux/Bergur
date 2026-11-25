@@ -61,9 +61,46 @@ animations, React Three Fiber + drei for the 3D book covers.
 
 ## Section order (`src/app/page.tsx`)
 
-Header → Hero → EventBar → About → SocialProof → FaroeDivider → Foredrag
-(benefit boxes + featured talk + 3 talk cards + topic list) →
-FaroeDivider → HeinesenProject → Books → Booking → Footer.
+Header → Hero → About → FaroeDivider → Foredrag (benefit boxes + featured
+talk + 3 talk cards + topic list) → FaroeDivider → HeinesenProject →
+Books → Booking → Footer.
+
+**2026-11 "finished product" pass — all visible placeholders removed.**
+The user asked for a site that reads as a finished product with nothing
+on it announcing that material is missing ("slet de steder, hvor der for
+eksempel mangler video eller andet … det skal ikke stå inde på
+hjemmesiden"), explicitly keeping layout and copy otherwise untouched,
+and adding the real material later. This **reverses the 2026-10 CRO
+brief's `[bracket]` convention for live content** — brackets are fine in
+the repo as data waiting to be filled, but nothing bracketed, disabled or
+"kommer snart" may render. What was removed:
+- `EventBar` — no longer rendered. Two of its three slots were
+  `[Indsæt arrangør]` and the third ("Oktober: Folkeuniversitetet,
+  København") is a past date presented as upcoming. The component file is
+  kept, like `HeroPortrait.tsx`; re-add `<EventBar />` to `page.tsx` once
+  there are real, future dates, and drop the stale October entry.
+- `SocialProof` — no longer rendered; every quote, name, org and the
+  "[Indsæt antal…]" headline were placeholders. File kept, including
+  `DEFAULT_TESTIMONIALS`. `getTestimonials()` still exists in
+  `src/sanity/queries.ts` and the `testimonial` schema is untouched, but
+  `page.tsx` no longer calls it — re-add the fetch and `<SocialProof …/>`
+  (after `About`) once real quotes exist.
+- Foredrag price line — "Fra `[X.000]` kr. ekskl. moms og transport" cut
+  down to just "Pris afhænger af format og lokation." Put the real
+  starting price back in when it's decided.
+- Booking "Se Bergur fortælle / Video kommer snart" box — deleted
+  outright. When footage exists, add a real YouTube/Vimeo embed (not a
+  `<video>` element — see the autoplay gotcha below).
+- Booking "Download pressekit (billeder + CV) — Kommer snart" disabled
+  button — deleted. The form's `Besked` placeholder no longer suggests
+  asking for a pressekit either.
+- Heinesen-hulen "Visualisering kommer snart" frame — deleted. The
+  section now renders as a single `max-w-3xl` text column over the
+  atmospheric Risin og Kellingin backdrop, and **switches itself back to
+  the two-column layout automatically** the moment the `heinesenImage`
+  Sanity field holds the real Henning Larsen rendering. So the way to
+  "add the rendering later" is to upload it in Sanity — no code change.
+  Still never ship a stock photo or fake render in that slot.
 
 **2026-10 CRO pass — three earlier decisions deliberately reversed** (the
 user supplied a detailed Danish conversion-optimization brief and asked
@@ -79,19 +116,16 @@ for exactly these changes; recorded here so a later session doesn't
   to *keep* the cinematic version — that preference is superseded by this
   brief. If asked to go cinematic again, confirm with the user first;
   don't silently pick one.
-- **Bracketed placeholder content is back, deliberately, in three
-  places**: `SocialProof` testimonials (quote text itself is bracketed,
-  not just name/org), the price line above the Foredrag cards ("Fra
-  `[X.000]` kr."), and `EventBar`'s November/December slots. The
-  "Placeholder content" section below previously said never to ship
-  bracketed text live again — the user's brief explicitly asked for
-  `[brackets]` as the marker for missing data this time, so follow that
-  instead. Swap in real values as they're collected; don't remove the
-  bracket convention without asking.
-- **`SocialProof` is rendered again**, directly after `About`, fed by
-  `getTestimonials()` with the bracketed defaults as fallback when Sanity
-  has nothing. Star rating (★★★★★) was dropped — it implied real reviews
-  next to text that says `[Indsæt citat...]`.
+- ~~**Bracketed placeholder content is back, deliberately, in three
+  places**~~ — **superseded by the 2026-11 finished-product pass above.**
+  The 2026-10 brief asked for `[brackets]` as the live marker for missing
+  data; the user has since asked for the opposite: nothing bracketed or
+  "kommer snart" may be visible on the site. Brackets stay allowed inside
+  component files as data awaiting real values, but a section whose
+  content is still bracketed is not rendered.
+- ~~**`SocialProof` is rendered again**~~ — also superseded; it is not
+  rendered. The star rating (★★★★★) stays dropped regardless, since it
+  would imply reviews that haven't been collected.
 
 `Intro.tsx` and `SubNav.tsx` were removed — they duplicated `Header`'s
 navigation and the credibility facts now live directly in `Hero` (as a
@@ -237,18 +271,26 @@ place must be added to all three. Current slugs:
 
 ## Placeholder content still needing real material
 
-- **Testimonials**: `SocialProof.tsx` is rendered again (directly after
-  `About`), deliberately showing bracketed placeholder quotes — see the
-  "2026-10 CRO pass" note under Section order above for why this reverses
-  an earlier decision. Content lives in `DEFAULT_TESTIMONIALS` in
-  `SocialProof.tsx`, used as a fallback when `getTestimonials()` returns
-  nothing from Sanity. Swap in real quotes/names/orgs (the `testimonial`
-  schema now has a `role` field too) as they're collected, keeping the
-  `[bracket]` convention for whatever's still missing.
-- **Foredrag price line** ("Fra `[X.000]` kr. ekskl. moms og transport",
-  above the talk cards in `Foredrag.tsx`) and **EventBar's
-  November/December slots** are bracketed placeholders — same CRO-brief
-  convention. Swap in real figures/bookings as they're confirmed.
+**Nothing in this list is visible on the live site** (2026-11
+finished-product pass — see Section order above). Each item is material
+that still has to be collected; the UI for it has been removed until it
+exists, rather than shipped as a bracketed or "kommer snart" stub. When
+adding any of it back, add the real thing — don't restore the stub.
+
+- **Testimonials**: `SocialProof.tsx` exists but is **not rendered**.
+  `DEFAULT_TESTIMONIALS` in that file holds the bracketed placeholders,
+  used as a fallback when `getTestimonials()` returns nothing from
+  Sanity. Once real quotes/names/orgs are collected (the `testimonial`
+  schema has a `role` field too), replace the defaults, re-add the
+  `getTestimonials()` fetch in `page.tsx`, and render `<SocialProof />`
+  after `About`.
+- **Upcoming dates**: `EventBar.tsx` exists but is **not rendered** — the
+  November/December slots were `[Indsæt arrangør]` and the October
+  Folkeuniversitetet entry is now in the past. Replace `UPCOMING` with
+  real, future bookings and re-add `<EventBar />` under `<Hero />`.
+- **Foredrag starting price**: the line above the talk cards now reads
+  only "Pris afhænger af format og lokation." Put a real "Fra X kr.
+  ekskl. moms og transport" back once the figure is decided.
 - **`Booking.tsx` now has a real backend**: `src/app/api/booking/route.ts`
   sends the enquiry via the Resend REST API (plain `fetch`, no SDK
   dependency) to `kontakt@bergurmoberg.dk` with `reply_to` set to the
@@ -270,23 +312,25 @@ place must be added to all three. Current slugs:
   talk has a single `TalkCTA` ("Forespørg på dette foredrag") instead of a
   second dead/redundant link. Add a PDF CTA back only once a real PDF
   exists per talk.
-- **Heinesen-hulen rendering**: `HeinesenProject.tsx` has an explicit
-  `TODO` comment marking where the real architectural rendering from
-  Henning Larsen Arkitekter goes once available. Until then it shows an
-  editorial placeholder (icon + "Visualisering kommer snart") over an
+- **Heinesen-hulen rendering**: `HeinesenProject.tsx` renders the real
+  architectural rendering from Henning Larsen Arkitekter as soon as the
+  `heinesenImage` Sanity field holds one — the section flips from a
+  single `max-w-3xl` text column to the two-column image+text layout by
+  itself, so adding the rendering needs no code change. With no image it
+  shows no frame and no placeholder. The section's backdrop is an
   atmospheric photo of Risin og Kellingin, the actual Faroese sea stacks
-  off Eysturoy (`/foredrag/verdens-mest-oversete.jpg`) — that photo is
-  real scenery, not a stand-in for the rendering; don't let it be mistaken
-  for one in copy.
-- **Pressekit**: `Booking.tsx` shows a disabled "Download pressekit
-  (billeder + CV) — Kommer snart" button (not a dead `href="#"` link —
-  that pattern was removed once already, see the Foredragsbeskrivelse
-  note below). Wire it to a real PDF once one exists.
-- **"Se Bergur fortælle" video**: `Booking.tsx` shows a static
-  "Video kommer snart" placeholder box above the form — no `<video>`
-  element, no autoplay (see "No autoplay `<video>` backgrounds" in the
-  design system section above for why). Replace with a real YouTube/Vimeo
-  embed once footage exists.
+  off Eysturoy (`/foredrag/verdens-mest-oversete.jpg`) — real scenery,
+  not a stand-in for the rendering; don't let it be mistaken for one in
+  copy, and never ship a stock photo as the render.
+- **Pressekit**: no pressekit UI on the page at all any more — the
+  disabled "Download pressekit — Kommer snart" button was removed, and
+  the booking form's `Besked` placeholder no longer suggests asking for
+  one. Add a real download link in `Booking.tsx` once a PDF exists.
+- **"Se Bergur fortælle" video**: the placeholder box above the booking
+  form was removed; there is no video slot on the page now. When footage
+  exists, add a real YouTube/Vimeo embed — never a self-hosted `<video>`
+  (see "No autoplay `<video>` backgrounds" in the design system section
+  above for why).
 - **Books**: "Ultraminor World Literatures" and "Resten i Vesten" have no
   cover art or purchase link, so they're not rendered — `TYPOGRAPHIC_BOOKS`
   in `Books.tsx` still holds their data (title + role, no image/buyUrl)

@@ -90,25 +90,6 @@ export function Booking() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.05} className="mt-10">
-          <p className="text-xs uppercase tracking-[0.25em] text-muted">
-            Se Bergur fortælle
-          </p>
-          <div className="mt-3 flex aspect-video items-center justify-center rounded-lg border border-white/15 bg-surface-raised/60">
-            <p className="text-sm text-muted">Video kommer snart</p>
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal delay={0.08} className="mt-6">
-          <button
-            type="button"
-            disabled
-            className="inline-flex cursor-not-allowed items-center gap-2 rounded-md border border-border bg-surface-raised px-4 py-2.5 text-xs text-muted disabled:opacity-70 sm:text-sm"
-          >
-            Download pressekit (billeder + CV) — Kommer snart
-          </button>
-        </ScrollReveal>
-
-        <ScrollReveal delay={0.1} className="mt-10">
           {status === "sent" || status === "fallback" ? (
             <div className="rounded-lg border border-border bg-surface-raised p-8 text-foreground">
               {status === "sent" ? (
@@ -219,7 +200,7 @@ export function Booking() {
                 <textarea
                   name="message"
                   rows={4}
-                  placeholder="Fx: “Vi vil gerne have jeres pressekit tilsendt” eller detaljer om jeres arrangement"
+                  placeholder="Fx: detaljer om jeres arrangement"
                   className="rounded-lg border border-border bg-background px-4 py-3 text-foreground outline-none focus:border-accent"
                 />
               </label>
