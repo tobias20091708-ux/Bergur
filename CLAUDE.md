@@ -306,10 +306,12 @@ adding any of it back, add the real thing — don't restore the stub.
   `mailto:` flow (opens the visitor's mail client, shows which happened
   honestly rather than claiming success either way). To finish wiring
   this up: create a Resend account, verify the sending domain
-  (`bergurmoberg.dk` — confirm it's actually live first, see Footer note
-  below), add `RESEND_API_KEY` (and optionally `RESEND_FROM_EMAIL`, which
-  defaults to `booking@bergurmoberg.dk`) to the `bergur` Vercel project's
-  environment variables, then redeploy. Don't reintroduce a fake "we got
+  (`bergurmoberg.dk` has no DNS at all — see the Footer note below;
+  `nordiskforedrag.dk` is the domain that exists, so verify that one
+  instead), add `RESEND_API_KEY` (and optionally `RESEND_FROM_EMAIL`,
+  which defaults to `booking@bergurmoberg.dk`) to the
+  `nordiskforedrag.dk` Vercel project's environment variables, then
+  redeploy. Don't reintroduce a fake "we got
   it" success message for either path — the success panel only shows
   after a real 2xx from `/api/booking`.
 - The "Download foredragsbeskrivelse (PDF)" link in `Foredrag.tsx` was
@@ -390,21 +392,28 @@ adding any of it back, add the real thing — don't restore the stub.
 - The canonical tag also covers a real duplicate-content issue: several
   Vercel hostnames serve identical content, so canonical always points at
   one chosen domain regardless of which alias served the request.
-- **⚠️ Open: `SITE_URL` points at the wrong domain.**
-  `src/app/layout.tsx` sets `SITE_URL = "https://bergur.vercel.app"`, and
-  `sitemap.ts` / `robots.ts` hardcode the same host. But the Vercel
-  project has had verified custom domains `nordiskforedrag.dk` and
-  `www.nordiskforedrag.dk` since 2026-10. So canonical, the sitemap, the
+- **`SITE_URL` lives in `src/lib/site.ts`, and the primary domain is the
+  apex `https://nordiskforedrag.dk`** (user's choice, 2026-11). It had
+  been `https://bergur.vercel.app`, with `sitemap.ts` and `robots.ts`
+  hardcoding the same host separately — so canonical, the sitemap, the
   robots.txt sitemap line, the OG/Twitter image URLs and the JSON-LD
-  `url`/`@id`/`image` all currently declare the vercel.app host as the
-  real one. Fix is one line — change `SITE_URL` and the two hardcoded
-  strings — but **ask the user first which host is primary** (apex
-  `nordiskforedrag.dk` or `www.`), and set up a redirect from the other,
-  because guessing wrong just moves the duplicate-content problem.
-  Related: the contact address everywhere is `kontakt@bergurmoberg.dk`,
-  a domain with no DNS at all (see the Footer note under "Placeholder
-  content") — `nordiskforedrag.dk` is the domain that actually exists, so
-  the real contact address may well belong there.
+  `url`/`@id`/`image` all declared a vercel.app alias as the real site.
+  All three now import the single constant; don't hardcode a host in any
+  of them again. `layout.tsx` re-exports `SITE_URL` for backwards
+  compatibility.
+- **⚠️ Still open: `www.nordiskforedrag.dk` does not redirect to the
+  apex.** Both are registered on the Vercel project with `redirect: null`,
+  so both serve 200s with identical content. Canonical now points at the
+  apex, which is enough for Google, but a redirect in the Vercel project's
+  Domains settings (www → apex, 308) would be cleaner. Not done here
+  because it changes live DNS/serving behaviour outside the repo.
+- **⚠️ Still open: the contact domain doesn't exist.** The address
+  everywhere on the site is `kontakt@bergurmoberg.dk`, a domain with no
+  MX, A or NS records at all (see the Footer note under "Placeholder
+  content"). `nordiskforedrag.dk` is the domain that actually exists, so
+  the real contact address probably belongs there — which would also be
+  the domain to verify in Resend for `/api/booking`. Until this is
+  resolved the booking form cannot deliver an enquiry by any path.
 - **All images use `next/image`**, not raw `<img>` — this was the actual
   Core Web Vitals fix, not 3D loading (the 3D book covers were already
   lazy/deferred/below-fold and not a plausible LCP cause). The site's

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { CursorSpotlight } from "@/components/CursorSpotlight";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,7 +16,7 @@ const fraunces = Fraunces({
   style: ["normal", "italic"],
 });
 
-export const SITE_URL = "https://bergur.vercel.app";
+export { SITE_URL };
 const OG_IMAGE = "/og/bergur-roenne-moberg.jpg";
 const TITLE =
   "Bergur Rønne Moberg | Foredrag om Færøerne og William Heinesen";
